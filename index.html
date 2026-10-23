@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="NNAM Volunteer Pocket Checklist: an unofficial study aid built from the National Naval Aviation Museum Volunteer Guide.">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>NNAM Volunteer PCL</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: one top-bound pocket checklist on a museum ready-room desk; white normal side, yellow emergency side, side tabs. Help rail beside it (below on phones). */
+:root{
+  --bg:#d3d9df; --bg2:#c5cdd5; --fg:#18202b; --muted:#4f5b68; --line:#a6b0ba; --accent:#1b3a73;
+  --p-white:#fbfbf6; --p-yellow:#f6e36e; --p-blue:#cfe1f0; --ink:#111111;
+  --stripe-a:#111111; --coil:#3a3f45; --coil-hi:#9aa1a8;
+  --check:#c8201a; --shadow:rgba(20,28,38,.28);
+  --navy:#1b3a73; --gold:#d4a52a;
+  --sans:"Arimo",Arial,"Liberation Sans",Helvetica,sans-serif;
+  --serif:"Tinos","Times New Roman","Liberation Serif",Times,serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11161c; --bg2:#1a2129; --fg:#dde3e9; --muted:#8f9aa6; --line:#2e3741; --accent:#9cbbe3;
+  --coil:#6b737c; --coil-hi:#c3c9cf; --shadow:rgba(0,0,0,.6); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#11161c; --bg2:#1a2129; --fg:#dde3e9; --muted:#8f9aa6; --line:#2e3741; --accent:#9cbbe3;
+  --coil:#6b737c; --coil-hi:#c3c9cf; --shadow:rgba(0,0,0,.6); color-scheme:dark }
+
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.band{height:10px;margin:-20px calc(-1 * max(16px,env(safe-area-inset-right,0px))) 18px calc(-1 * max(16px,env(safe-area-inset-left,0px)));
+  background:repeating-linear-gradient(-45deg,var(--navy) 0 10px,var(--gold) 10px 20px)}
+header.top{max-width:1080px;margin:0 auto 18px;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;justify-content:space-between}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+header h1{margin:2px 0 0;font-size:clamp(22px,4vw,30px);font-weight:700;letter-spacing:.02em;text-wrap:balance}
+header .demo{font-size:12.5px;color:var(--muted);max-width:44ch;line-height:1.4}
+
+.wrap{max-width:1080px;margin:0 auto;display:grid;gap:28px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.wrap{grid-template-columns:minmax(0,560px) minmax(0,1fr);align-items:start}}
+
+/* ---------- The book ---------- */
+.book{container-type:inline-size;width:min(100%,540px);margin:0 auto;--zoom:1}
+.book *{--in:calc(100cqi / 5.35);--pt:calc(100cqi / 5.35 / 72 * var(--zoom))}
+.spiral{position:relative;width:calc(var(--in)*5);height:calc(var(--in)*.34);z-index:5;
+  background:repeating-linear-gradient(90deg,transparent 0 calc(var(--in)*.07),var(--coil) calc(var(--in)*.07) calc(var(--in)*.13),var(--coil-hi) calc(var(--in)*.13) calc(var(--in)*.15),var(--coil) calc(var(--in)*.15) calc(var(--in)*.2),transparent calc(var(--in)*.2) calc(var(--in)*.25));
+  background-size:calc(var(--in)*.25) 100%;background-position:calc(var(--in)*.12) 0;
+  -webkit-mask:linear-gradient(#000,#000) center/calc(100% - var(--in)*.3) 100% no-repeat;mask:linear-gradient(#000,#000) center/calc(100% - var(--in)*.3) 100% no-repeat;border-radius:3px}
+.stage{position:relative;width:calc(var(--in)*5);height:calc(var(--in)*8.5);margin-top:calc(var(--in)*-.17);perspective:calc(var(--in)*14)}
+.book[data-face="back"] .stage{margin-bottom:calc(var(--in)*.34)}
+.sheet{position:absolute;inset:0;background:var(--paper);color:var(--ink);
+  box-shadow:0 1px 0 rgba(0,0,0,.08),0 10px 28px -8px var(--shadow);border-radius:0 0 3px 3px;overflow:hidden;transform-origin:50% 0;backface-visibility:hidden}
+.sheet.white{--paper:var(--p-white)} .sheet.yellow{--paper:var(--p-yellow)} .sheet.blue{--paper:var(--p-blue)}
+.sheet .holes{position:absolute;top:0;left:calc(var(--in)*.15);right:calc(var(--in)*.15);height:calc(var(--in)*.18);
+  background:radial-gradient(circle at 50% 30%,var(--bg) 0 calc(var(--in)*.035),transparent calc(var(--in)*.04)) 0 0/calc(var(--in)*.25) 100% repeat-x;opacity:.9;z-index:3}
+.sheet.emer::before{content:"";position:absolute;left:0;top:0;bottom:0;width:calc(var(--in)*.25);z-index:2;
+  background:repeating-linear-gradient(45deg,var(--stripe-a) 0 calc(var(--in)/8),var(--paper) calc(var(--in)/8) calc(var(--in)/4))}
+.sheet.emer.even::after{content:"";position:absolute;left:0;right:0;top:0;height:calc(var(--in)*.25);z-index:2;
+  background:repeating-linear-gradient(45deg,var(--stripe-a) 0 calc(var(--in)/8),var(--paper) calc(var(--in)/8) calc(var(--in)/4))}
+.body{position:absolute;inset:calc(var(--in)*.3) calc(var(--in)*.28) calc(var(--in)*.48) calc(var(--in)*.36);overflow:auto;scrollbar-width:thin;overscroll-behavior:contain}
+.emer .body{left:calc(var(--in)*.5)}
+.emer.even .body{top:calc(var(--in)*.44)}
+.foot{position:absolute;left:calc(var(--in)*.36);right:calc(var(--in)*.28);bottom:calc(var(--in)*.18);display:flex;justify-content:space-between;
+  font:700 calc(var(--pt)*9)/1 var(--sans);font-variant-numeric:tabular-nums}
+.emer .foot{left:calc(var(--in)*.5)}
+
+/* Normal, division and reference pages */
+.norm{font:400 calc(var(--pt)*10)/1.34 var(--serif)}
+.norm h3{font:700 calc(var(--pt)*11)/1.2 var(--sans);text-transform:uppercase;margin:0 0 .5em;text-align:center}
+.norm h4{font:700 calc(var(--pt)*11)/1.2 var(--sans);margin:1em 0 .4em;text-align:center}
+.norm h5{font:700 calc(var(--pt)*9.5)/1.2 var(--sans);text-transform:uppercase;letter-spacing:.03em;margin:.95em 0 .35em}
+.norm .resp{text-transform:uppercase}
+/* Emergency pages: Arial bold throughout */
+.ep{font:700 calc(var(--pt)*10)/1.32 var(--sans)}
+.ep .rev{background:var(--ink);color:var(--paper);padding:.25em .4em .3em;margin:0 0 .7em;text-transform:uppercase;font-size:calc(var(--pt)*14);line-height:1.15}
+.ep .rev span{display:block}
+.ep h4{font-size:calc(var(--pt)*14);text-transform:uppercase;margin:1.1em 0 .5em;line-height:1.15}
+.ep h5{font-size:calc(var(--pt)*11);text-transform:uppercase;margin:.9em 0 .35em}
+.body p{margin:.45em 0}
+p.cond{margin:.7em 0 .35em;font-style:italic}
+.ep p.cond{font-style:normal;text-decoration:underline;text-underline-offset:2px}
+
+/* Steps: dot leaders, responses flush right */
+.steps{display:flex;flex-direction:column;gap:.2em}
+.ep .steps{gap:.42em}
+.step{all:unset;box-sizing:border-box;position:relative;display:flex;align-items:baseline;gap:.35em;width:100%;cursor:pointer;padding:.08em 0;border-radius:2px;
+  font:inherit;color:inherit;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.step:hover .item,.step:hover .resp{text-decoration-line:underline;text-decoration-thickness:.5px;text-underline-offset:2px}
+.step:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.step .num{flex:0 0 2.1em;text-align:right;font-variant-numeric:tabular-nums}
+.step .item{flex:0 1 auto;min-width:0}
+.step .lead{flex:1 1 1em;min-width:.8em;overflow:hidden;white-space:nowrap;letter-spacing:.12em}
+.step .lead::before{content:"..............................................................................................................."}
+.step .resp{flex:0 1 auto;max-width:54%;text-align:right}
+.step .tick{position:absolute;left:-.1em;top:-.25em;width:1.5em;height:1.5em;z-index:1;pointer-events:none;opacity:0;transform:scale(.6);transition:opacity .15s,transform .15s}
+.step[aria-pressed="true"] .tick{opacity:1;transform:none}
+.step[aria-pressed="true"] .item,.step[aria-pressed="true"] .lead,.step[aria-pressed="true"] .resp,.step[aria-pressed="true"] .num{opacity:.5}
+.tick path{fill:none;stroke:var(--check);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+[data-tip],[data-g],[data-ref]{text-decoration:underline dotted;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,currentColor 50%,transparent);cursor:help}
+.flag{font-family:var(--sans);font-weight:700;font-size:.8em;vertical-align:.25em;margin-left:.1em}
+
+/* Warnings, cautions, notes: 16 picas, centered */
+.wcn{width:min(100%,calc(var(--pt)*192));margin:.7em auto;text-align:left}
+.wcn .lbl{display:block;text-align:center;margin-bottom:.3em;font-family:var(--sans);font-weight:700}
+.wcn.warning{border:calc(var(--pt)*2) solid var(--ink);padding:.35em .55em .45em}
+.wcn.warning .lbl{letter-spacing:.12em;border-bottom:calc(var(--pt)*1) solid var(--ink);padding-bottom:.2em}
+.wcn.caution{border:calc(var(--pt)*.8) solid var(--ink);padding:.35em .55em .45em}
+.wcn.caution .lbl{letter-spacing:.12em}
+.wcn.note{padding:.1em .2em}
+.wcn ul{margin:0;padding-left:1.1em}
+
+/* Index pages */
+.idx{display:flex;flex-direction:column;gap:.15em;margin:.2em 0 .6em}
+.idx a{display:flex;align-items:baseline;gap:.3em;color:inherit;text-decoration:none;padding:.1em 0}
+.idx a:hover .lbl2,.idx a:focus-visible .lbl2{text-decoration:underline}
+.idx .lead{flex:1 1 1em;overflow:hidden;white-space:nowrap;letter-spacing:.12em}
+.idx .lead::before{content:"..............................................................................................................."}
+.idx .pg{font-variant-numeric:tabular-nums;font-family:var(--sans);font-weight:700}
+.idx-group{font-weight:700;text-transform:uppercase;margin:.7em 0 .15em;font-family:var(--sans);font-size:calc(var(--pt)*10)}
+
+/* Tables */
+.tbl{overflow-x:auto;margin:.4em 0 .7em}
+table{border-collapse:collapse;width:100%;font:700 calc(var(--pt)*9)/1.28 var(--sans);font-variant-numeric:tabular-nums}
+.norm table{font:400 calc(var(--pt)*9.5)/1.3 var(--serif)}
+.norm td:first-child{font-family:var(--sans);font-weight:700;font-size:.92em}
+th,td{border:calc(var(--pt)*.6) solid var(--ink);padding:.28em .38em;text-align:left;vertical-align:top}
+th{font-family:var(--sans);font-weight:700;text-transform:uppercase;text-align:center;font-size:.92em}
+ul.plain{margin:.3em 0;padding-left:1.2em}
+ul.plain li{margin:.15em 0}
+.refline{margin-top:1em;padding-top:.4em;border-top:calc(var(--pt)*.6) solid var(--ink);font:700 calc(var(--pt)*8)/1.4 var(--sans);letter-spacing:.03em}
+.refline span[data-ref]{margin-right:.2em}
+
+/* Covers */
+.cover{position:absolute;inset:calc(var(--in)*.32) calc(var(--in)*.28) calc(var(--in)*.3) calc(var(--in)*.36);display:flex;flex-direction:column;font-family:var(--sans)}
+.emer .cover{left:calc(var(--in)*.5)}
+.emer.even .cover{top:calc(var(--in)*.44)}
+.cover .pub{font:700 calc(var(--pt)*11)/1 var(--sans);text-align:right}
+.cover .ttl{margin-top:calc(var(--in)*.45);max-width:62%}
+.cover .ttl .k{font:700 calc(var(--pt)*11)/1.2 var(--sans);text-transform:uppercase;letter-spacing:.04em}
+.cover .ttl .ac{font:700 calc(var(--pt)*34)/1 var(--sans);margin:.12em 0 .1em;letter-spacing:.01em}
+.cover .ttl .ac2{font:700 calc(var(--pt)*10)/1.3 var(--sans);text-transform:uppercase}
+.cover .wings{margin-top:calc(var(--in)*.2);height:calc(var(--pt)*7);width:calc(var(--in)*2.2);background:repeating-linear-gradient(-45deg,var(--navy) 0 calc(var(--pt)*5),var(--gold) calc(var(--pt)*5) calc(var(--pt)*10))}
+.cover .notices{margin-top:auto;font:400 calc(var(--pt)*7.5)/1.35 var(--sans);max-width:66%;display:flex;flex-direction:column;gap:.55em}
+.cover .notices b{font-weight:700}
+.cover .date{font:700 calc(var(--pt)*10)/1.2 var(--sans);margin-top:.9em}
+.cover .fict{border:calc(var(--pt)*1.2) solid var(--ink);padding:.4em .5em;font:700 calc(var(--pt)*8)/1.3 var(--sans);text-transform:uppercase}
+.loc{position:absolute;right:0;display:flex;align-items:center;gap:.4em;font:700 calc(var(--pt)*8)/1.1 var(--sans);text-transform:uppercase;text-align:right;transform:translateY(-50%)}
+.loc .bar{width:calc(var(--in)*.38);height:calc(var(--pt)*6);background:var(--ink);margin-right:calc(var(--in)*-.28)}
+.loc.b{right:auto;bottom:calc(var(--in)*-.3);transform:translateX(-50%);flex-direction:column;gap:.25em;text-align:center}
+.loc.b .bar{width:calc(var(--pt)*6);height:calc(var(--in)*.2);margin:0}
+
+/* Tabs */
+.tabs{position:absolute;inset:0;pointer-events:none}
+.tab{position:absolute;pointer-events:auto;border:0;padding:0;cursor:pointer;background:var(--tabpaper);color:var(--ink);
+  font:700 calc(var(--pt)*8 / var(--zoom))/1 var(--sans);text-transform:uppercase;letter-spacing:.05em;
+  display:flex;align-items:center;justify-content:center;gap:.4em;box-shadow:0 4px 10px -6px var(--shadow);transition:filter .15s}
+.tab.side{left:100%;width:calc(var(--in)*.35);border-radius:0 4px 4px 0}
+.tab .v{writing-mode:vertical-rl;display:flex;align-items:center;gap:.4em;white-space:nowrap}
+.tab.yellow.side .v{margin-right:calc(var(--in)*.06)}
+.tab.bot{top:100%;height:calc(var(--in)*.34);border-radius:0 0 4px 4px;padding-inline:.4em}
+.tab .n{writing-mode:horizontal-tb;font-size:1.1em}
+.tab.behind{filter:brightness(.9)}
+.tab:hover{filter:brightness(1.04)}
+.tab.cur{filter:none;box-shadow:none}
+.tab.white{--tabpaper:var(--p-white)} .tab.yellow{--tabpaper:var(--p-yellow)} .tab.blue{--tabpaper:var(--p-blue)}
+.tab.yellow.side::after{content:"";position:absolute;right:0;top:0;bottom:0;width:calc(var(--in)*.09);
+  background:repeating-linear-gradient(45deg,var(--stripe-a) 0 calc(var(--in)/16),var(--tabpaper) calc(var(--in)/16) calc(var(--in)/8));border-radius:0 4px 4px 0}
+
+/* Toolbar */
+.bar{width:min(100%,540px);margin:16px auto 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.btn{border:1px solid var(--line);background:var(--bg2);color:var(--fg);padding:9px 12px;border-radius:6px;cursor:pointer;
+  font:700 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;min-height:40px;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.emerg{min-height:44px;background:repeating-linear-gradient(45deg,#111 0 7px,#f6e36e 7px 14px);color:#111;border:2px solid #111;padding:0;overflow:hidden}
+.btn.emerg span{background:#f6e36e;padding:7px 10px;margin:4px;border-radius:3px;font-size:12px;letter-spacing:.16em}
+.pager{display:flex;align-items:center;gap:6px}
+.pglabel{min-width:10em;text-align:center;font:700 12px/1.25 var(--sans);font-variant-numeric:tabular-nums}
+.pglabel small{display:block;font-weight:400;color:var(--muted);font-size:11px;letter-spacing:.04em}
+.counter{font:400 12px/1 var(--sans);color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* Help rail */
+aside{min-width:0}
+aside h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:4px 0 10px;border-left:8px solid;
+  border-image:repeating-linear-gradient(45deg,var(--navy) 0 4px,var(--gold) 4px 8px) 0 0 0 1;padding-left:10px}
+aside .lede{font-size:14.5px;line-height:1.55;margin:0 0 16px;max-width:60ch}
+.quick{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.quick li{border-bottom:1px solid var(--line);padding:11px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:baseline}
+.quick .txt{font-size:14px;line-height:1.45}
+.quick .txt b{display:block;font-size:14.5px}
+.quick .go{border:0;background:none;color:var(--accent);font:700 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;padding:6px 0;white-space:nowrap}
+.quick .go:hover{text-decoration:underline}
+.keys{margin-top:16px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.k{font:700 12px/1 var(--sans);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:5px 9px;min-width:30px;min-height:30px;background:var(--bg2);color:var(--fg);cursor:pointer}
+.k:hover{border-color:var(--muted)}
+.k:active{transform:translateY(1px);border-bottom-width:1px}
+.disclaim{margin-top:18px;font-size:12px;line-height:1.5;color:var(--muted);max-width:60ch}
+.flip-ghost{position:absolute;inset:0;z-index:20;pointer-events:none}
+
+/* Hover / press-and-hold explanations */
+#tip{position:fixed;z-index:60;width:max-content;max-width:min(320px,calc(100vw - 24px));max-height:min(56vh,420px);overflow:auto;padding:9px 11px 10px;border-radius:6px;pointer-events:none;
+  background:var(--fg);color:var(--bg);font:400 13px/1.45 var(--sans);box-shadow:0 8px 22px -8px rgba(0,0,0,.55);opacity:0;transform:translateY(3px);transition:opacity .12s,transform .12s;visibility:hidden}
+#tip.on{opacity:1;transform:none;visibility:visible}
+#tip.pin{pointer-events:auto}
+#tip b.h{display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;opacity:.75;margin-bottom:3px}
+#tip p{margin:0 0 6px} #tip p:last-child{margin-bottom:0}
+#tip .src{display:block;margin-top:6px;font-size:10.5px;letter-spacing:.06em;opacity:.7}
+#tip .x{float:right;border:0;background:none;color:inherit;font:700 13px/1 var(--sans);padding:0 0 4px 10px;cursor:pointer}
+#tip .flagnote{margin-top:7px;padding-top:6px;border-top:1px solid color-mix(in srgb,var(--bg) 35%,transparent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="band" aria-hidden="true"></div>
+<header class="top">
+  <div>
+    <div class="eyebrow">National Naval Aviation Museum · Volunteers</div>
+    <h1>NNAM Volunteer Pocket Checklist</h1>
+  </div>
+  <div class="demo">Built from the NNAM Volunteer Guide (revised 20 March 2025) as a study aid. Not an official Museum publication.</div>
+</header>
+
+<div class="wrap">
+  <section aria-label="Pocket checklist">
+    <div class="book" id="book" data-face="front">
+      <div class="spiral" aria-hidden="true"></div>
+      <div class="stage" id="stage"></div>
+    </div>
+    <div class="bar" role="toolbar" aria-label="Checklist controls">
+      <div class="pager">
+        <button class="btn" id="prev" aria-label="Previous page">◀</button>
+        <div class="pglabel" id="pglabel" aria-live="polite"></div>
+        <button class="btn" id="next" aria-label="Next page">▶</button>
+      </div>
+      <button class="btn emerg" id="emer" title="Emergency procedures index (E)"><span>EMER</span></button>
+    </div>
+    <div class="bar">
+      <button class="btn" id="flip">Flip PCL</button>
+      <button class="btn" id="zoom">Type 100%</button>
+      <button class="btn" id="reset" disabled>Clear checks</button>
+      <span class="counter" id="counter"></span>
+    </div>
+  </section>
+
+  <aside>
+    <h2>Using this checklist</h2>
+    <p class="lede">A pocket checklist in the Navy style. The white side covers your watch, each volunteer division, and reference facts. Flip the book over, or tap EMER, for the yellow emergency side. Tap a step to check it off. <b>Dotted words explain themselves</b>: point at them, or press and hold on a phone.</p>
+    <ul class="quick" id="quick"></ul>
+    <div class="keys"><button type="button" class="k" id="kprev" aria-label="Previous page">←</button> <button type="button" class="k" id="knext" aria-label="Next page">→</button> turn pages · <button type="button" class="k" id="kemer" aria-label="Emergency index">E</button> emergency index · <button type="button" class="k" id="kflip" aria-label="Flip the book">F</button> flip the book<br>Tap a key here, or press it on your keyboard.</div>
+    <p class="disclaim">Unofficial study aid prepared by a volunteer. The NNAM Volunteer Guide and Museum staff direction govern wherever they differ from this checklist. Where the Guide's own sections disagree, the step is marked † and the explanation says so.</p>
+  </aside>
+</div>
+
+<script>
+(function(){
+const PUB = "NNAM VPCL";
+const DATE = "22 OCTOBER 2026";
+const TICK = '<svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 13.2c2 1.4 3.6 3.2 5 5.4C11.6 12 15.6 7 21 3.6"/></svg>';
+const REFS = {"1.1":{"h":"Scope","t":"The Volunteer Guide is designed to provide a volunteer with basic information related to the volunteer organization, the Museum, and supporting organizations. All volunteers must become familiar with the information contained in this Guide in order that they may be knowledgeable and work within approved policies and guidelines while carrying out their duties."},"1.2":{"h":"Operations","t":"This Guide is the basic document governing the Museum volunteer organization and operations. Individual divisions may develop instructions, manuals, or handbooks elaborating on the Guide in matters relating to their divisions but may not contradict or conflict with the Guide."},"1.3":{"h":"Review","t":"The Guide will be reviewed periodically, as required by the Volunteer Coordinator (VC), and Volunteer Leadership Council (VLC), to ensure that it continues to be current, appropriate, pertinent, and consistent with evolving Museum policies. The VLC will coordinate any Guide review with the VC. Proposed amendments/revisions can be submitted to the above-named entities by any volunteer for their review and possible inclusion in the next Guide review. Amendments or revisions selected will be forwarded by the VLC to the VC who will then submit them to the Museum Deputy Director, and they will be submitted ultimately to the Museum Director for approval."},"2.1":{"h":"Establishment","t":"In the early 1950s, a number of senior naval aviators identified a need to capture and preserve the heritage of naval aviation. Their concern and vision gave birth to the Museum. The Museum was established on 14 December 1962, by the authority of the Secretary of the Navy as a shore activity in active operating status. The primary mission of the Museum is to select, collect, preserve, and display appropriate memorabilia representative of the development, growth, and historic heritage of United States Naval Aviation. It began in a small World War II temporary building of only 8,500 square feet at NAS Pensacola. A major effort was undertaken to collect the rapidly disappearing examples of historic aircraft, artifacts, and memorabilia of Navy, Marine Corps, and Coast Guard Aviation. As the collection grew rapidly, the need for a permanent, larger home for the Museum became apparent. To meet this need, and to provide adequate facilities for the preservation of the history and heritage of naval aviation, Retired Admiral Arthur M. Radford volunteered to organize a civilian group to provide Museum support. Thus, the Naval Aviation Museum Association was founded in 1966 to raise funds for the new Museum building. Presently referred to as the Naval Aviation Museum Foundation (Foundation), this organization provides the non-profit fund-raising efforts for the Museum."},"2.2":{"h":"Development","t":""},"2.2.1":{"h":"Early Development","t":"Phase I April 1975 the new Museum was completed. This first phase, now known as the South Wing, included a main exhibit area, offices, gift shop, and entrance lobby, measuring more than 64,000 square feet, almost eight times the size of the original building.\nPhase II 1980 additions were completed. This included the mezzanine and the spaces under it, bringing the total Museum space to 107,000 square feet.\nPhase III In 1990 the Museum added more than 127,000 square feet to the Museum. This area, known as the West Wing, included the Blue Angel Atrium, the USS Cabot flight deck area, the Emil Buehler Naval Aviation Library, and office spaces.\nPhase IIIA In May of 1996 the Museum added 44,000 square feet and included a 534-seat Giant Screen Theater and a magnificent five story glassed entrance foyer known today as the Quarterdeck. Centered on the this space is the timeless heroic sized statuary titled, \"The Spirit of Naval Aviation,\" is displayed here representing naval aviators from World War I, World War II, the war in Korea, the war in Vietnam, Operation Desert Storm, and beyond. In addition, the Museum’s Hangar Bay One, opened the day after Thanksgiving 2010. It adds another 55,000 square feet of display space and houses 30-35 aircraft from the post Korean War through modern times including an Apollo space exhibit."},"2.2.2":{"h":"Recent Development","t":""},"2.3":{"h":"Stature","t":"Additional exhibits include the Devotion Corsair Display highlighting the Life of ENS Jesse L. Brown, The Naval Aerospace Medical Exhibit, TOPGUN Exhibit and HAL-3 Seawolves Video and Aircraft Exhibit. Most recent addition to the Nimitz Flight Deck area includes a large screen active display of launch and recovery onboard an aircraft carrier.\nThe Museum is recognized as one of the leading attractions in the entire Southeast and has welcomed millions of visitors from throughout the world. The Museum has approximately one hundred and seventy- nine (179) aircraft on display in the main Museum, Hangar Bay One, and on the flight line. The Museum also has over nine hundred thirty-seven (937) additional aircraft on loan or in storage. The aircraft in the collection span the entire history of naval aviation from 1911 to the present. The Museum clearly has one of the finest collections of historic aircraft in the world."},"2.4":{"h":"Hosting","t":"Throughout the year, the Museum plays host to a number of official, semi-official, non-official functions/ ceremonies that include reunions, seminars, retirements, wingings, graduations, re-enlistment activities and private parties."},"3.1":{"h":"Aircraft Collection","t":"The mission of the Museum, an official Department of the Navy Museum, is to \"select, collect, preserve, and display historic artifacts relating to the history of Naval Aviation.\" At the core of the Museum's collections are more than 1,000 aircraft --- most of which are on display at other museums, with approximately 179 located aboard Naval Air Station Pensacola. These include record-setting aircraft like the NC-4 flying boat, the first plane to fly across the Atlantic, as well as combat veterans, including an SBD Dauntless that flew at the Battle of Midway, two Vietnam MiG-killers, an A-7 Corsair II that logged missions over Iraq during Operation Desert Storm, and the last F-14 Tomcat to fly a combat mission. After undergoing a 14-year restoration at the Museum, the rare Birdcage Corsair is now a part of the Museum. The F4U-1 is just one of three that survived to the present day."},"3.2":{"h":"Artifact Collection","t":"Though the aircraft are the largest of the Museum relics, they are just one dimension of the collection. More than 36,000 uniforms, flight gear, weaponry, medals, and decorations, and other memorabilia add a personal touch to the story of Naval Aviation. In addition, the Emil Buehler Naval Aviation Library, which houses personal and official papers of prominent Naval Aviators, squadron records, and a photograph collection numbering hundreds of thousands, is a significant repository of Naval Aviation history and draws researchers to the museum from around the world."},"3.3":{"h":"Recognition","t":"As the Museum has grown, so has its popularity. In the last decade alone, visitation has more than doubled, approaching one million in some years. The Museum has achieved recognition as one of the world's premiere air and space museums and the most-visited museum in Florida. The Museum also received the prestigious American Association of Museums' accreditation in November 2018. Our visitors come from every state in the Union and more than 60 foreign countries. On any given day, more than 70 percent of our visitors are from outside Florida. With each addition to the Museum, there has been a commensurate increase in visitation."},"3.4":{"h":"Command Structure","t":"The Museum is the largest of 10 official Navy museums located throughout the United States. It is a shore-based Echelon Three command reporting to the Naval History and Heritage Command which is an Echelon Two command. Information about the Navy system can be found on the Naval History and Heritage Command — www.history.navy.mil website.\nTom Moore, then president of ABC Television, founded the Foundation, a 501(c)(3) non-profit corporation, in 1965 along with Oakleigh Thorne, a lawyer with a prestigious New York law firm, and retired Admiral W. J. McNeil. The charter of the Foundation states that it will: (a) develop the Museum, and (b) foster meaningful education programs for youth and adults. Since its founding, the Foundation has raised over 140 million dollars through private donations to fund construction of the Museum; to recover and restore historic aircraft; to develop and expand Museum exhibits; and create a host of education programs - including the National Flight Academy (NFA), an aviation-inspired learning experience designed to teach principles of Science, Technology, Engineering, and Math (STEM).\nIn 1993, the Foundation began to focus on youth education programs. In 1996, the Museum created the Flight Adventure Deck (FAD), a 38-station interactive exhibit on aviation, which addresses the scientific and mathematical principles of aerodynamics, propulsion, and meteorology.\nThe “Navigators Education Team” is led by the Foundation’s Director of Education. Volunteer team members come from various backgrounds and are passionate about education. The team meets monthly. Volunteers work with the Education Director in hosting educational activities at the Museum such as: Scout Saturday, Girls in Aviation Gulf Coast, Homeschool Academy, Read Across America, JROTC Leadership or STEM Leadership field trips to the Museum, Art and Essay Contests, World War II Summers and Tactile Tours. Volunteers interested in becoming part of the team should contact the Education Director at 850-308-8935.\nThe Modelers Division may conduct youth model-building workshops as part of the Foundation’s Educational Outreach Programs such as Homeschool Academy or FAD, and may provide temporary scale model displays in support of Volunteer Organization Visitor Support or special events."},"5.1":{"h":"Organization","t":"The National Flight Academy (NFA) is a subsidiary of the Foundation. The NFA is an educational program authorized, but not endorsed or financially supported by the United States Navy.\nThe NFA, the Foundation's latest educational initiative, was authorized by the Department of the Navy in 2001. Construction began in 2009 with NFA christening the AMBITION in May of 2011. AMBITION is a 102,000 square foot immersive learning facility that allows students (primarily 7th-12th grade) to experience science, technology, engineering, and mathematics (STEM) principles in a practical \"real- world\" environment. STEM skills are used in tandem with the equally important 21st century learning skills, including critical thinking, problem-solving, teamwork, and communication to advance the team.\nAMBITION is next-generation innovative play. From the theme park-like sights and sounds to premier technology available for students, the experience is unparalleled. Individuals and groups are both welcome, providing the opportunity for an exceptional team-building adventure. From 6-day Deployments to 1-day Adventures, the NFA ignites imagination and encourages learning."},"5.2":{"h":"Emphasis","t":"The NFA is designed to address the serious concerns of declining Science, Technology, Engineering, and Math (STEM) skills and standards in our country. The NFA's mission is to inspire students who subsequently return to their parent schools and seek out the more challenging STEM courses."},"5.3":{"h":"Scope","t":"Disciplines include aerodynamics, propulsion, navigation, communications, flight physiology, and meteorology, along with core values, teamwork, and leadership skills development."},"5.4":{"h":"Staff","t":"The NFA development team currently includes the best and brightest from the entertainment industry as well as leaders in education, simulation, and training. The immersive simulated environment, coupled with the most revolutionary methods in instruction, fosters cooperative learning and inspire young people primarily in grades 7 through 12 to pursue the math and sciences today that open the door to science and engineering degrees and careers of tomorrow. This vision for today's youth and tomorrow's leaders is the guiding purpose of the NFA."},"5.5":{"h":"Funding","t":"The NFA is a self-supporting, tuition-based educational program. In order to make this adventure a reality for as many students as possible, the NFA is committed to a financial aid program that enables a demographically and geographically diverse student population to attend. The Foundation welcomes support from individuals, corporations, and foundations for both our scholarship program and general operating funds."},"6.1":{"h":"General Rules","t":"All visitors to the Museum shall be afforded the same high degree of courtesy, consideration, friendliness, and pleasantness as a guest in our private homes. Many of the visitors are on a military installation for the first time and will form their opinion of the military, especially the Navy, from their visit. Therefore, it behooves each volunteer to project the best possible image of the Navy."},"6.1.1":{"h":"Visitor Dress Code","t":"All visitors are expected to comply with a dress code based on commonly accepted decency standards. Volunteers observing violations of the dress code shall respectfully address the visitor on the Museum policy and ask them to adapt to meet the policy requirements. Should a confrontation occur, Volunteers should immediately report the violation to a museum staff member to resolve the issue. Such violations include the following:\n• Visitors old enough to walk must wear shoes and shirts.\n• Items of wearing apparel bearing obscene or profane language, pictures or characters are forbidden if disparaging individuals or groups based on sex, race, religion, and national origin.\n• Excessively revealing attire and bathing suits must be appropriately covered."},"6.1.2":{"h":"Visitor Conduct","t":"Visitors should conduct themselves in an orderly manner, always respecting the rights and comfort of others at all times."},"6.1.3":{"h":"Large Groups","t":"Large groups of children, such as school groups or Scouts, must have at least one adult remaining with every ten children throughout their time in the museum. Violations of this requirement will be referred to their sponsoring authority by a Museum staff member."},"6.1.4":{"h":"Unruly Visitors","t":"Unruly children or children roaming unescorted will be united with parents or accompanying adult(s). Parents/Adult will be instructed that Museum policy states any children under the age of 16 must be accompanied by an adult at all times. Volunteers may address unruly adults regarding proper behavior. Should a confrontation occur, volunteers should immediately report the violation to a Museum staff member to resolve the issue."},"6.1.5":{"h":"Unauthorized Items In Museum","t":"There will be no smoking (including e-cigarettes). There will be no beverages or food except in concessions, or Cubi Bar areas. Personal capped water bottles and screw capped water bottles (with water only) will be allowed. Only clear tote or storage bags of any size are allowed in the Museum and on the Flight Line. Clutch purses (solid or clear) approximately the size of a hand (4.5-6.5 inches) is allowed. Military in uniform are authorized a backpack while in the Museum. Absolutely no luggage carried or rolled will be allowed in the Museum and visitors will be turned away. There will be no balloons, no pets (except service animals), no bouncing balls, no skate shoes, or the throwing of any objects allowed. Weapons of any kind are prohibited, except when carried by uniformed law enforcement officers or federal agents in the performance of their duty. A volunteer observing a weapon, authorized or unauthorized, or an abandoned package shall report it to a Museum staff member immediately by using the “Granger” call. Once Museum staff arrives, they will take over the situation. Should volunteers encounter a circumstance with a visitor concerning the definition of a “Service Animal” (Attachment 17, Page 65: NNAM Pet Policy), a Museum staff member will be contacted immediately to resolve the issue as needed. All bags in the museum are subject to inspection."},"6.1.6":{"h":"Unauthorized Actions/Areas","t":"No one is permitted to go behind roped off areas; enter areas designated \"STAFF ONLY,\" climb in or on aircraft, enter displays, or in any way deface exhibits or aircraft. NO ONE IS ALLOWED TO RUN IN THE MUSEUM."},"6.1.7":{"h":"Disabled Visitors","t":"People with disabilities will be given special attention. The Museum has wheelchairs and strollers available for loan at the information desk. There are three elevators in the Museum for their use."},"6.1.8":{"h":"Notifying Staff","t":"Volunteers will report unresolved violations of Museum rules to the nearest Museum staff member who will take appropriate action. Volunteers may take immediate and appropriate action when a situation presents an imminent danger to the safety of a visitor (e.g., running)."},"6.2":{"h":"Hours of Operation","t":"The Museum is open to visitors daily from 9:00 a.m. to 4:00 p.m., seven days a week, except for Thanksgiving Day, Christmas Day, and New Year's Day. Hangar Bay One closes at 3:30 p.m."},"6.3":{"h":"Photography","t":"Cameras and camcorders are permitted in all areas that are open to the public. All office and housekeeping areas are off limits to the public."},"6.4":{"h":"Lost and Found","t":""},"6.4.1":{"h":"Volunteer Action","t":"Lost items found in the Museum during the day should be turned into the Information Desk. These items will be held until the owner claims them or until the end of each day. At the end of each day, unclaimed items will be turned over to a staff member. The staff will then turn these items over to the Operations Division Office where they can be claimed by the owner."},"6.4.2":{"h":"Visitor Action","t":"Visitors reporting lost items should leave their name, address, and a written description of the item at the Information Desk. This information should be given to the Museum staff at closing each day. Visitors can also be given the Museum \"lost and found\" telephone number to call during the normal working hours of the week. The \"lost and found\" is located in the Operations Division Office."},"6.5":{"h":"Visitor Illness or Accident","t":"If a Museum visitor has an accident or becomes ill on the Museum premises, it must be reported immediately, utilizing the appropriate code, to the nearest Museum staff member, Radios are provided for this purpose. Volunteers should exercise concern for the comfort and welfare of the injured or ill person until the staff member arrives. Volunteers must never offer medical advice or administer medication (adhesive bandages are OK). Volunteers may not directly call for help from the police or emergency medical services. Volunteers who have a current CPR Certification are allowed to perform CPR. Any volunteer may use the automatic defibrillators (AEDs). Visitor Support Volunteers should offer assistance to staff if needed, directing visitors away from the incident area, and/or help locating family/group members elsewhere in the museum."},"6.6":{"h":"Deliveries","t":""},"6.6.1":{"h":"Normal","t":"Deliveries to the various offices in the building or Gift Shop are not permitted through the front doors unless authorized by staff. All delivery personnel, including UPS, Overnight Mail or FedEx, will be referred to the Service Entrance on the West (volunteer entrance) side of the building."},"6.6.2":{"h":"Special Events","t":"Equipment and materials, such as catering equipment and materials, band equipment, decorations, etc., should be brought in through the Service or Pantry Entrance in the back of the West Wing. The Information Desk and Museum staff will be informed when exceptions are expected."},"6.7":{"h":"Ceremonial or Social Functions","t":"All requests for the scheduling of school field trips in the Museum will be referred to the Giant Screen Theater office located behind the snack bar. All requests for Military events will be scheduled through the Museum Military Volunteer/Events (MilVol/Events) Coordinator. The \"Plan of the Day,\" which lists all special activities (ceremonies, dinners, special tours, etc.) is posted at the Information Desk and inside the Ready Room next to the Volunteer Coordinator Office. Information Desk and staff personnel should take notice of the daily plan and be fully informed of each day's activities."},"6.8":{"h":"Radio Security","t":"When any radio on channel 2 (normal channel) is used to call either Museum staff or volunteer personnel, the transmitted message is NOT secure. This means that not only does the person called hear the message, but anyone near the other radios in use can hear it also. When it is necessary to alert the Museum and volunteer staff without others detecting the significance of the call or message, the following code words are used."},"6.8.1":{"h":"Confidential Call Codes","t":"• BARNEY -- When it is necessary to call without revealing the significance of the call or message, merely go on the radio and say \"BARNEY\" is needed at (give the location). The word BARNEY will alert both Museum staff and volunteer staff that their presence is urgently needed at the location indicated. BARNEY is to be used only for those few situations indicated below where secure communication is required.\n› Base Security may wish to apprehend a person of interest and has notified Museum staff. Staff will in turn notify volunteer staff and the Information Desk.\n› A person in the Museum is detected harassing a visitor, either physically or verbally.\n› Serious sickness or injury of a visitor.\n› Any other situation requires that Visitor Support personnel be alerted without nearby people being alarmed or warned.\n› Any other EMERGENCY requiring immediate action by the Museum staff.\nOPIE - If a bomb threat develops requiring immediate assistance from the Museum staff and volunteer staff personnel, merely call and say that \"OPIE\" has a problem and this will alert both Museum staff and Museum Visitor Support that their presence is urgently needed at the location indicated.\n• ADAM -- If a child is lost and has been separated from their parents, the code word \"ADAM\" shall be used. The volunteer should make a radio call saying that ADAM is required at a certain location. This will alert Museum staff and volunteer staff that their presence is needed at the given location where the lost child or worried parents are located and require immediate help. No personal description or other information about the lost child will be given over the radio.\n• RED -- If a volunteer detects a fire in the Museum, he or she should make a radio call indicating there is a \"CODE RED\" and give the location. This will alert the museum staff and volunteers that there is a fire in that location and an immediate response is needed. The volunteer should pull a nearby fire alarm and begin moving visitors out of harm’s way.\n• CHARLIE -- If a volunteer sees an active shooter, or someone with a weapon who is not uniformed law enforcement, in the Museum, he or she should make a radio call indicating that \"CHARLIE\" is needed in the location of the shooter. This will alert staff and museum visitor support of the dangerous situation. The volunteer should not engage the shooter. The volunteer should take cover in a safe place and take as many visitors as possible without alerting the shooter. Staff will call local law enforcement personnel for assistance. Museum and volunteer staff will execute a \"shelter in place\" for the Museum visitors until help arrives.\n• GRANGER - Any Security Issue, not already addressed by BARNEY, OPIE or CHARLIE Codes, including weapons discovered during bag checks, and unattended packages,"},"6.9":{"h":"Building Evacuation for Volunteers","t":""},"6.9.1":{"h":"Procedure","t":"When an announcement is made to evacuate the Museum, via Walkie Talkie and/or overhead speaker, all volunteers should assist staff to usher all visitors to the lower deck and then out the nearest exit. Volunteers will then exit the building. If time permits, it would be advisable that all people exiting the Museum take their ID, keys and/or purses with them. This will facilitate departure from Museum property or muster location."},"6.9.2":{"h":"Muster Location","t":"The muster location will be the southwest corner of the main Museum parking lot (straight across the parking lot from the blue awning (Volunteer Entrance)."},"6.10":{"h":"NNAM Service Animal Guide (Attachment 17, Page 65: NNAM Pet Policy)","t":"Per the Americans with Disabilities Act (ADA), service animals are defined as “dogs that are individually trained to do work or perform tasks for people with disabilities.” In the state of Florida, miniature horses trained specifically for this purpose also qualify as service animals.\nIf a visitor brings an animal into the museum, the Military Security or the Museum volunteer will simply state in a pleasing tone: “We are sorry, but no pets are allowed in the Museum.” If the visitor states the animal is a ‘Therapy, Anxiety, or Comfort Animal,” politely inform the visitor that “the Museum does not allow Therapy, Anxiety, or Comfort Animals inside the Museum.”\nStaff or volunteers may ask two questions: (1) Is the animal a service animal required because of a disability? And (2) what work, or task has the animal been trained to perform?\nThere can be no inquiry as to the type of disability. Visitors cannot be asked to provide credentials or certificates.\nA person with a disability cannot be asked to remove his/her service animal from the premises unless: (1) the animal is out of control and the handler does not take effective action to control it, or (2) the animal is not housebroken.\nIf you are uncertain how to deal with a situation, or if a service animal appears to be misbehaving or is being disruptive, contact a Museum staff member to handle the situation.\nService animals are not permitted on the flight line due to extreme conditions. Patrons with service animals are welcome to view the practice from areas adjacent to the flight line."},"7.1":{"h":"Purpose","t":"The Museum volunteer organization is the central management and placement entity for all volunteers involved with the Museum. The volunteer organization provides assistance to the Museum through the recruitment and placement of individuals who wish to contribute their time and expertise to the ongoing efforts of the Museum. The objective of the volunteer organization is to match individual interests with Museum requirements and to facilitate the work of volunteers by supplying necessary policy and management direction. The volunteer organization is functionally divided into divisions which encompass the various Museum volunteer programs. The volunteer organization is headed by the Museum Director and Deputy Director and administered through the Volunteer Coordinator."},"7.2":{"h":"Volunteer Organization Chart","t":"(See Attachment 1, page 31)"},"7.3":{"h":"Deputy Director","t":"The Museum Director has delegated control and oversight of the volunteer organization and program to the Deputy Director. In all matters concerning volunteer organization policy, the Deputy Director is the final authority.\nThe following positions serve under the Deputy Director: Volunteer Coordinator (VC) e Military Volunteer (MilVol) / Events Coordinator"},"7.4":{"h":"Volunteer Coordinator","t":"Volunteer organization policy and standard operating procedures are developed by the VC in concert with the Deputy Director. The VC has primary responsibility for managing and executing approved policies affecting the mission, tasks, and functions of the volunteer organization and responding to immediate situations that impact their effectiveness. The VC also provides support to the volunteer organization divisions and committees as needed. The VC may seek the advice of the Volunteer Leadership Council (VLC) if developing organization policies and procedures. In addition, the routine responsibilities of the VC include, but are not limited to:\n• Solicitation, screening, referral for placement, and evaluation of volunteers according to job descriptions and tasks defined by the volunteer divisions and the Museum staff.\n• Maintenance and operation of a volunteer administrative office to support the volunteer organization\n• Resolution of conflicts or issues that involve organization policy or procedures, individual volunteers, organization interface with Museum staff and/or visitors rest with the VC. If the VC cannot resolve such situations through normal management procedures, including the involvement of relevant Division Head, ultimate resolution will rest with the museum management.\n• Handles daily issues including daily watch bill; publishing of the plans of the day, week, and month.\n• Prepares, develops, administers, coordinates and executes plans to provide a range of volunteer support services for the museum.\n• The incumbent provides administrative services in the form of files and form maintenance, preparation of general office duties, including correspondence, correspondence control to include tasks, scheduling, and tracking volunteer hours and duties.\n• Production and distribution of stock forms; maintains visitation numbers; presents the daily shift briefings to volunteers.\n• Department POC for tour requests; Museum Volunteer events scheduling; military and civilian award recognition.\n• Chair of VLC meetings; calls special VLC meetings; scheduling of Department Head meetings; database management and publishing of monthly volunteer newsletter."},"7.5":{"h":"Military Volunteer/Events Coordinator","t":"The museum's Military Volunteer Program oversees both officer and enlisted personnel in direct support of many museum programs and provides gratuitous services to support museum operations, some of which are carried out entirely by military volunteers. The Military Volunteer Coordinator is responsible for event management and in this function, supports museum operations that encompasses eight hours a day, 362 days a year. The position maintains a database and keeps track of individual military volunteer activities and hours worked.\n• Interfaces with the various commands on board Naval Air Station Pensacola, facilitating the assignment and work of Military Volunteers.\n• Works closely with other Museum Departments within the organization to ensure command and volunteer needs are met.\n• Familiar with the general goals and objectives of the museum and military protocol to facilitate the coordination of desired work.\n• Identifies volunteers that may possess or may be able to acquire requisite skill set desired, and assigns volunteers to the department or division once trained.\n• Plans and coordinates military volunteer recognition ceremonies, and implements public awareness efforts to promote military volunteerism for the Museum, and to inform the military community of volunteer opportunities using a variety of media.\n• Responsible for all live/virtual event management, quality control/assurance, schedule administration, customer interaction and complaint resolution, reporting metric and organizational products and services for approximately 350-400 events held annually in the museum.\n• Receives customer event reservations electronically or in person and ascertains the availability of event space, technical support requirements for the event, and then advises event applicant on Museum capabilities and evaluates their event requirements for applicability.\n• Independently advises customer of Museum capabilities and recommends alternate options when necessary.\n• Plans and schedules all Museum event reservations.\n• Enters and/or reviews requirements in the reservation system and work order management systems, assigns appropriate status and notifies respective museum staff of further coordination and/or museum department support requirements."},"7.6":{"h":"Volunteer Leadership Council","t":""},"7.6.1":{"h":"Background","t":"The Volunteer Leadership Council (VLC) was established on January 1, 2025. Previously, the volunteer organization included a Volunteer Advisory Board (VAB) and a committee of Volunteer Division Heads (DHs). Since the information provided and decided within both groups was essentially the same, it was decided that at the end of 2024 the VAB and the committee of Volunteer DHs would be dissolved and replaced by the VLC."},"7.6.2":{"h":"Organization","t":"The initial VLC will include all Volunteer DHs, the members of the former VAB that are not DHs, and the Volunteer Coordinator. The VC will chair council meetings. At the end of the first year, members who are not DHs will be replaced by two At-Large members. At-Large members will be selected annually by a vote of volunteers. All Museum volunteers in good standing are eligible to apply for VLC positions. Leadership of the Museum and the Foundation are invited to attend the open session of the VLC."},"7.6.3":{"h":"General Responsibilities","t":"Members of the VLC may bring requests, suggestions, and concerns of volunteers to the council. The VLC will respond to requests from the VC for assessment and advice. The VLC may also provide advice on, or be asked to review, other matters concerning museum operations as desired by the Director or Deputy Director. DH responsibilities and the duties of each individual division are provided in the Museum’s Volunteer Guidebook in sections 7.7.and 7.8. DHs or At-Large members who determine they can no longer fulfill the duties of their positions will immediately notify the VC."},"7.6.4":{"h":"Selection Of New Division Head Members","t":"1. The VC will announce the DH vacancy to all Museum volunteers via e-mail.\n2. Volunteers interested in applying for vacant positions will inform the VC of their intent and receive an application form (exceptions may apply).\n3. The volunteer will provide a completed application to the VC for distribution to VLC members prior to the next council meeting.\n4. The applicant will come before the VLC to be introduced and answer follow-up questions.\n5. A simple majority of VLC members will determine the outcome. In cases of a tie vote, the outgoing DH will cast the deciding vote. If that DH is not available to vote, the VC will cast the determining vote.\n6. Applicants for a DH position would ideally, but not necessarily, be a volunteer in that division.\n7. Hours of service will be a consideration factor but not necessarily a determining factor in selection."},"7.6.5":{"h":"Selection Of At-Large Members","t":"1. Time and location of annual elections will be determined by the Deputy Director and announced by the VC.\n2. Applicants will request an application form from the VC.\n3. Applicant information will be made available to Museum volunteers by the VC prior to the election."},"7.6.6":{"h":"Meetings","t":"The VLC will meet on the first Monday of the month at 9:00 a.m.\n2. In the absence of the VC, the meeting will be rescheduled, or the Deputy Director may chair the meeting.\nSpecial meetings may be called by the Deputy Director or the VC.\n4. If Museum leadership, Foundation leadership, or other invited guests are in attendance, the meeting will commence with an open session.\n5. A closed session with the VC, DHs, and At-Large members will follow. DHs will be called on to address any new or ongoing issues within their divisions or the museum in general.\n6. The meeting will finalize with closed discussion without the presence of the VC.\n7. Minutes will be recorded for record-keeping purposes."},"7.7":{"h":"Division Heads","t":"The volunteer organization Division Heads (DH) have a direct reporting relationship to the VC. Each DH has the responsibility to ensure proper training of all volunteers assigned to his/her division. DHs will ensure that volunteer time is properly recorded and reported, the rules of conduct and dress code are followed, and scheduled Volunteers log in and work their shifts. They will also ensure that all areas of responsibility are manned and that watch schedules are submitted to the VC for publishing. Appropriate interface with Museum visitors to encourage a pleasant, entertaining, and educational Museum experience will be a prime goal. DH’s meet monthly with the VC. DH’s may appoint an Assistant/Alternate to assist with duties as needed."},"7.8":{"h":"Divisions and Brief Descriptions","t":""},"7.8.1":{"h":"Aircraft Preservation And Maintenance","t":"The conservation and preservation of aircraft is exacting work. Work in this division affords trained and untrained craftsmen an opportunity to apply their skills, as well as gain experience in other required skills through on-the-job training. A general knowledge of the use of hand and power tools and applicable safety precautions is required. Volunteers normally work mornings, Monday through Friday, except for federal holidays. In this division, the normal requirement is two watches per week, which total 32 hours per month. This is necessary to keep workers current with the projects underway. The DH has the authority to waive the hour requirement."},"7.8.2":{"h":"Library Collections","t":"The Museum employs an archivist and staff. Volunteers in this division assist the staff in curatorial and archival activities. Duties may involve research of naval aviation history, as well as cataloging, processing, and filing of the Museum's sizable collection of technical manuals, historical documents, photographs, reference books, and other aviation-oriented publications. They also function as receptionists at the reference desk located in the front lobby of the library. Volunteers with a background in naval/general aviation, military history, research and/or computer operations are preferred. Library hours are 9:00 a.m. to 4:00 p.m., Monday through Friday. Internships are available upon recommendation by curatorial and archival managers."},"7.8.3":{"h":"Docent","t":"Docents conduct scheduled and special tours of the Museum aircraft and other exhibits for visitors. For the visitor, Docents are considered experts in interpreting the Museum exhibits as they relate to the history of Navy, Marine Corps, and Coast Guard aviation. In addition to the above tours, Docents may be called upon to address civic groups about naval aviation. It is recommended that prospective Docents follow at least two scheduled tours to become acquainted with the depth of information that must be learned before deciding to go into the training program. If a volunteer is accepted for Docent training, the DH will suggest detailed study requirements and training materials. A Docent Reader's File is maintained in the volunteer ready room to assist in the learning process. Visits to the Emil Buehler Library in the Museum are encouraged for further research. It is essential for the Docent to learn the material thoroughly and be able to present it accurately in his/her individual style. A minimum of two tours per month is required once a volunteer becomes a qualified Docent."},"7.8.4":{"h":"Information Desk/Hangar Bay One (HBO)","t":"Information Desk volunteers are the first point of contact visitors have upon entering the Museum. They not only assist the general public while they visit, but also answer a myriad of questions unrelated to the Museum, such as inquiries about the Pensacola area, Naval Air Station, and the area's many attractions. Volunteers serve scheduled periods on the Information Desk seven days a week, 08:45 a.m. to closing. The watch period is divided into two four-hour watches. The morning watch is from 08:45 a.m. to 12:30 p.m., and the afternoon watch is from 12:15 p.m. to closing at 4:00 p.m. HBO closes at 3:30 p.m.. Two or more volunteers will be scheduled for each four-hour watch. A pleasant demeanor, knowledge of the Museum, and a real desire to meet people and make them feel comfortable is essential."},"7.8.5":{"h":"Visitor Support","t":"Museum Visitor Support volunteers ensure the enjoyment, safety, and comfort of Museum guests. They keep a watchful eye on the aircraft and displays in the main Museum and in Hangar Bay One to prevent damage or theft. If vandalism or theft is observed, Visitor Support volunteers must call for staff assistance, since they have no authority to detain or reprimand a guest or call for Base Police. The watch period is divided into two four-hour watches. The morning watch is from 08:45 a.m. to 12:30 p.m., and the afternoon watch is from 12:15 p.m. to closing at 4:00 p.m. HBO closes at 3:30 p.m.. Visitor Support volunteers also act as greeters and serve as roving ambassadors in the main Museum and Hangar Bay One, answering questions, giving directions or telling guests about the aircraft and displays. Visitor Support volunteers help maintain order and must be alert to report any threat to the safety and comfort of Museum guests."},"7.8.6":{"h":"Flight Adventure Deck","t":"The Flight Adventure Deck (FAD) is an area of the Museum closed to the public, except for scheduled tours with a volunteer to escort visitors through the area. The FAD Aeronautical Science Exhibit is an interactive classroom laboratory designed to motivate youth and stimulate an interest in science, technology, engineering, and mathematics (STEM). The FAD was designed and built by the staff of the Museum, with funding provided by the Foundation. Each weekday morning during the scheduled school year, students from Santa Rosa and Escambia County schools are introduced to the principles of flight through instruction conducted by two FAD teachers, one from each county. Annually, the program welcomes between 4,000 and 5,000 Middle School Students. During the summer, FAD hosts Weekly Day Camps for rising 5th and 6th graders. Day Camp is also in STEM format, with the learning elements centered around aviation. Each Day Camp can accommodate 36 campers per week. These weekly summer camps run for eight weeks total."},"7.8.7":{"h":"Home Front","t":"Home Front is a display of a typical small \"downtown\" rural area during World War II. Located between the Guadalcanal Display and the Theater Display on the second floor, there is a grocery store, 1943 home (kitchen and living room), and typical storefronts of that era. The sample movie theater and Jukebox area are also from that era. Volunteers working in this exhibit may wear clothing typical of the WWII era, to do a first-person impression when approved by the DH of the area. Home Front volunteers provide exhibit monitoring for the general Home Front area and talk to visitors about the way life was in WWII for those at home. Each volunteer in Home Front receives a reference book of information about Home Front in WWII."},"7.8.8":{"h":"Blue Angel Volunteer Support Division (During Blue Angel Practice","t":"SEASON)"},"7.8.8.1":{"h":"Blue Angel Flight Line Team","t":"Volunteers are assigned to set up the flight line viewing area, ensure the bleachers are clean and wiped down, interact with visitors, monitor guests for medical issues, provide a safe and secure viewing area, maintain flight line integrity, and quickly return the flight line to its original, clean, free of debris (FOD-free condition). Volunteers need to be a Museum volunteer for at least one year and be in good standing with the Museum. Volunteering during the Blue Angel season satisfies volunteer requirements during the in-season. However, in the off-season, volunteers will resume normal volunteer hours with another museum division. Volunteers must be able and willing to speak in front of large groups of people, have a basic knowledge of the Blue Angels, and be able to answer basic questions from visitors. Volunteers must be able to endure extreme heat (in excess of 100 degrees) as well as wind chill and cold while on their feet for 3 hours without shade or protection from heat, cold, wind, and rain. Approximately 1,200 to 3,500 visitors attend each practice session, mid-March through the end of October."},"7.8.8.2":{"h":"Blue Angel Autograph Team","t":"The mission of the Blue Angel Autograph Team is to enable Blue Angel fans to obtain as many autographs as possible in the limited time allotted by the Navy Flight Demonstration Squadron, while helping create a positive experience for all. Volunteers maintain the lines of visitors, and keep order in autographs lines. Volunteers are required to be in good standing with the Museum and must satisfy the minimum number of volunteer hours along with their autograph duties. Volunteers must be physically able to stand and walk for the duration of the autograph session, including setup and tear down, which is approximately two hours. Each autograph session lasts approximately 30-45 minutes, typically on a Wednesday following a Scheduled Practice (as well as when practice is cancelled due to weather or another issue)."},"7.8.9":{"h":"Modelers Division","t":"Volunteers bring special skills to the division in the repair, preservation, restoration and fabrication of scale models that form elements of museum exhibits or exist as accessioned artifacts in the Museum’s collection. At the request of, and in cooperation with the Curator, Deputy Director or other Museum staff, the division, will make recommendations for such work. Upon approval, the division will execute such repairs, restorations or fabrication of scale models in support of the museum or Foundation objectives. Skill requirements are outlined below. When required, volunteers will work in conjunction with those of the Exhibits Division. The overarching objective will be to ensure that Museum exhibits incorporate or showcase scale models of the highest quality in scale fidelity, accuracy in finish, and exacting detail that befits a world-class Museum.\nAdditionally, the Modelers Division may conduct youth model-building workshops as part of the Foundation’s Educational Outreach Programs, such as Homeschool Academy or FAD and may provide temporary scale model displays in support of Volunteer Organization, Visitor Support or special events.\nVolunteer scale modelers will have a working knowledge and demonstrated basic skills in the below listed required items: e Concept of scale ratios and importance of scale fidelity in modeling e Basic construction and alignment in modeling aircraft, vessel, and vehicle subjects e Knowledge of properties of modeling materials, including basswood and balsa, polystyrene, polyvinyl and polyethylene plastics, RTV silicone rubber, and polyethylene casting resins e Knowledge of appropriate choice and application of adhesives, sealants, putties and primers e Demonstrated basic skills in safe use of knives, saws, motor-tools, and sanding pads/sticks e Demonstrated basic skills in painting and/or airbrushing, and masking and application of markings e Requirements for use and safe handling of volatile organic compounds e Familiarity with MSDS (Material Safety Data Sheets) on all substances in use"},"7.8.10":{"h":"Volunteer Recognition Events Coordinator","t":"Volunteers assist with recognition, setup, and procurement of items and services, including recognition dinners, in support of the volunteer program. Funding is provided by the Foundation 501(c)(3) for non-profit support to the volunteers. This support can include education, administration, entertainment, special projects, and guest speakers supporting the volunteers and volunteer program."},"7.8.11":{"h":"Speakers Bureau, Outreach, Special Projects","t":"Volunteers participate in the development of special presentations, speaking engagements, and Power Points intended for the use of educating, sharing, and introducing naval aviation history and heritage to our visitors, as well as military, civic, school, and social organizations. These presentations may be used to recruit and encourage volunteerism and participation in the museum volunteer program."},"7.9":{"h":"Job Descriptions and Recommended Skill Requirements","t":""},"7.9.1":{"h":"Aircraft Preservation And Maintenance","t":"This division is responsible for conducting research of historical records and executing the preservation, conservation, and restoration process of vintage and historically significant aircraft to static display conditions. Recommended skill requirements are as follows:\n• Aircraft sheet metal repair and fabrication\n• Aircraft corrosion control\n• =6Aircraft welding\n• Aircraft paint preparation Machinist skills Mechanical skills\n• Other duties as assigned (See Attachment 4, page 34, AIRCRAFT PRESERVATION AND MAINTENANCE VOLUNTEER APPLICATION) (See Attachment 5, page 36, AIRCRAFT PRESERVATION AND MAINTENANCE VOLUNTEER CHECK IN/CHECK OUT FORM) (See Attachment 6, page 38, AIRCRAFT PRESERVATION AND MAINTENANCE VOLUNTEER JOB SKILLS)"},"7.9.2":{"h":"Library/Collections","t":"This division is looking for people with an interest in preserving history through the archives and curatorial branches of the NNAM. Proper care, collection, documentation, handling, and preservation of macro and micro artifacts ensures education and enjoyment for generations. Recommended skill requirements are as follows:\nPublic Affairs / Phone Interaction Cataloging / Organizing/ Documentation Accessioning and Inventory Control Library Tech / Research, Computer, Scanning and Logging"},"7.9.3":{"h":"Docent","t":"Recommended skill requirements - (Attachment 7, Page 46)"},"7.9.4":{"h":"Information Desk/Hanger Bay One","t":"Recommended skill requirements — (Attachment 8, Page 48)"},"7.9.5":{"h":"Visitor Support","t":"Recommended skill requirements — (Attachment 9, Page 51)"},"7.9.6":{"h":"Flight Adventure Deck","t":"Recommended skill requirements — (Attachment 10, Page 56)"},"7.9.7":{"h":"Home Front","t":"Recommended skill requirements — (Attachment 11, Page 59)"},"7.9.8":{"h":"Blue Angel Support Teams","t":""},"7.9.8.1":{"h":"Flight Line Team Recommended skill requirements — (Attachment 12, Page 60)","t":""},"7.9.8.2":{"h":"Autograph Team Recommended skill requirements — (Attachment 13, Page 61)","t":""},"7.9.9":{"h":"Modelers","t":"Recommended skill requirements — (Attachment 14, Page 62)"},"7.9.10":{"h":"Volunteer Recognition Events Coordinator","t":"Standard Operating Procedures — (Attachment 15, Page 63)\nSPEAKERS' BUREAU, OUTREACH, SPECIAL PROJECT Standard Operating Procedures — (Attachment 16, Page 64)"},"8.1":{"h":"Volunteer Application","t":"Any individual may submit a written volunteer position application to the volunteer administrative office for processing. All applications will be considered without reference to race, color, religion, sex, or national origin. Along with the personal information requested, the individual's specific areas of interest should be chosen from the ongoing programs listed on the application form. The applicant will be contacted for a personal interview by the VC or by her/his designee. Provided the individual meets all volunteer qualifications, the applicant will be scheduled to begin their training."},"8.2":{"h":"Qualifications","t":"Volunteer positions are open to all individuals with the interest and commitment of service to the Museum, providing they meet the qualifications established for each division. Volunteers must be at least 18 years of age and able to perform their prescribed duties. A minimum time commitment of at least\n96 hours per year is required to maintain active volunteer status in most divisions. Winter volunteers (Snowbirds) will be expected to meet these time requirements while residing in the area. The VC may waive the time requirements on a case-by-case basis. Volunteers may work independently or with other volunteers."},"8.3":{"h":"Initial Volunteer Orientation and Training","t":""},"8.3.1":{"h":"Comprehensive Volunteer Guide Review/Museum Walkthrough","t":"To be accomplished first, followed by Information Desk, Visitor Support, and Home Front Watches completed, in any order. The NNAM VOLUNTEER INITIAL TRAINING CHECKLIST (Attachment 2, Page 32) will be annotated as the new volunteer completes each requirement. Following completion of volunteer training requirements, new volunteers will complete the Volunteer Agreement Form (Attachment 3, Page 33).\n• Volunteer Guide Review — Once approved as a new volunteer, he/she will receive a personal copy of the latest Volunteer Guide prior to the first orientation date. The orientee should review the guide for any questions prior to their first training. The Guide is intended to be a reference document containing a large amount of information with a detailed table of contents so volunteers can look up needed information as necessary. The Guide also contains critical information of which each volunteer should be familiar.\n• Museum walk-through (Orientation) — The individual conducting the orientation will go through the Guide with the new volunteer making sure he/she is generally familiar with the document and aware of the critical material in it. They will review any questions the orientee has from the Volunteer Guide Book. Following review, the walk through will include the main museum on the lower floor and upper deck, Hangar Bay One and the Library. The walk- through will ensure the new volunteer is familiar with the location and general content of each section of the Museum. More detailed information about specific sections of the Museum will be presented later in the initial training process with Standing Watches."},"8.3.2":{"h":"Watches","t":"• Two Visitor Support Watches: These two watches MUST be coordinated in advance. The VC will arrange this training. The Visitor Support DH or Watch Captain may schedule performance of additional requirements during the assigned visitor support watch. Two Information Desk Watches: These two watches MUST be coordinated in advance. The VC will arrange this training. The Information Desk DH or Watch Captain may schedule performance of additional requirements during the assigned Information Desk watch. One Home Front Watch: This watch MUST be coordinated in advance. The VC will arrange this training. The Home Front DH may schedule performance of additional requirements during the assigned Home Front Watch. « Recommended, but not required: › One museum tour with any Docent: This requirement may be scheduled concurrently with a Visitor Support or Information Desk watch and DOES NOT require prior coordination. › Tour of the Library: This requirement may be scheduled concurrently with a Visitor Support or Information Desk watch and DOES require prior coordination with the Library DH. › Attendance at a Blue Angels Practice: This may be done at any time and need not be completed prior to assignment to a Division by the VC.\n› View the presentations at the Giant Screen Theater: This may be done at any time and need not be completed prior to assignment to a Division by the VC. Volunteers with a Museum ID may attend at no cost.\n› View the Sunken Treasures Video: This may be done at any time and need not be completed prior to assignment to a Division by the VC."},"8.4":{"h":"Roles and Responsibilities","t":"As a volunteer with the Museum, everyone must always remember that when in contact with Museum visitors, the impression a visitor leaves with is in many ways determined by the volunteer's action, knowledge, and attitude. The volunteer must be familiar with and follow several rules and regulations that govern both the operation of the Museum and the behavior of the volunteer. The following paragraphs will provide an overview of the volunteer roles and responsibilities."},"8.5":{"h":"Personal Behavior/Ethics","t":""},"8.5.1":{"h":"Conduct/Courtesy","t":"Most volunteers will be in contact with the general public while carrying out their duties. Therefore, the use of inappropriate comments, unacceptable language, foul language, expression of political views, making off color jokes, remarks, or innuendo critical of the Museum or the Foundation, sexual statements or remarks, or any other form of undesirable verbal expression is prohibited. The volunteer must demonstrate courtesy and cordiality in all personal contacts and in telephone conversations. Reading books or non-official material and chewing gum in public contact areas are prohibited. The ethical standards for all volunteers must be consistent with standards of conduct prescribed for all Museum and Foundation staff personnel."},"8.5.2":{"h":"Personal Gain","t":"Volunteer service shall be undertaken for the betterment of the Museum, and not for personal gain. A Museum volunteer may not accept compensation for performance of Museum tasks. Personal compensation includes gifts, tips, fees, gratuities, or other dispensation to the volunteer, their family, or household. However, prior approved expenses directly relating to the Museum functioning may be submitted to the VC for reimbursement. If someone offers a gift, tip, etc., the volunteer must refer that person to the Foundation or to the donation boxes."},"8.5.3":{"h":"Privileged Information","t":"Volunteers who have access to the Museum collections, research, staff activities, and associated privileged information must respect the private, official nature of that information and not discuss it outside of the work area."},"8.5.4":{"h":"Conflict Of Interest","t":"The Museum allows outside agencies and activities to hold functions on the premises. To avoid any possible conflict of interest, volunteers assisting with such activities must report any financial or personal affiliation with that activity to the VC."},"8.5.5":{"h":"Attendance","t":"Each volunteer is expected to be prompt and reliable in meeting all work schedules. Shift times are 8:45 a.m. to 12:30 p.m. and 12:15 p.m. to 4:00 p.m. (closing). Take meals prior to reporting for your shift. If working two shifts in one day, a lunch meal time may be taken for 30 minutes in between."},"8.5.6":{"h":"Personal Information","t":"Each volunteer must notify the volunteer administrative office of any changes in personal information, i.e., address change, telephone number, e-mail address, etc."},"8.5.7":{"h":"Communication With Museum Visitors","t":"The hallmark of an outstanding Museum is the dedication of all the volunteers to provide only accurate information. If you don't know the answer to a question presented by a guest, admit it and help the guest find another source of information."},"8.5.8":{"h":"Media Coverge","t":"No volunteer should make any statements to the media concerning the Museum or Foundation business or activities. All media inquiries should be referred to Museum or Foundation Staff."},"8.6":{"h":"Dress Code","t":"All volunteers working in or around the Museum must present a public image that reflects well on the Museum. As representatives, volunteers must always provide a uniform professional image by wearing the appropriate and correct dress for their job and must always be neat, clean, and well-groomed always. No hats are allowed unless specifically included as optional to wear within a division (i.e.: Flight Line, Restoration, Home Front and Modelers). Inappropriate clothing includes jeans, T-shirts, athletic wear, shorts, flip flops, hoodies, crop tops, visible undergarments and torn clothing. The appropriate dress for each division is outlined below. All volunteer dress code issues will be addressed by the VC for final decision."},"8.6.1":{"h":"Aircraft Preservation And Maintenance Volunteers","t":"All volunteers working in this area must wear clothing and footwear consistent with current safety regulations for their type of work. Staff will provide specific requirements."},"8.6.2":{"h":"Library Archives, Office Areas, And Non-Specified Work Areas","t":"Volunteers must always provide a professional image by wearing the appropriate and correct dress for their job and must always be neat, clean, and well-groomed."},"8.6.3":{"h":"Docents, Information/HBO Desk, Visitor Support","t":"Male volunteers interacting with the visitors will wear a collared dress shirt with tie (tie is optional for Visitor Support and Docents), a Navy-blue blazer/sport coat with gray or tan/khaki slacks. Women will wear dress blouses with a Navy-blue blazer/coat with gray, tan/khaki, or Navy slacks or skirts. White slacks or skirts may be worn during the summer months. Individuals who were authorized to wear a flight jacket on active duty may wear it in place of the Navy blazer or coat while performing volunteer duties. Docents may also wear mock turtleneck/deck shirts with flight jackets."},"8.6.4":{"h":"Flight Adventure Deck","t":"All volunteers working in this area must wear clothing and footwear consistent with current safety regulations for their type of work. Staff will provide specific requirements."},"8.6.5":{"h":"Home Front","t":"Male volunteers interacting with the visitors will wear a dress shirt with tie, a Navy-blue blazer/sport coat with gray or tan/khaki slacks. Women will wear dress blouses with a Navy- blue blazer/coat with gray, tan/khaki, or Navy slacks or skirts. White slacks or skirts may be worn during the summer months. Volunteers may also wear clothing typical of the early 1940s, during the WWII era with approval of the DH. Women's clothing should be simple print dresses with an apron, or overalls and factory type shoes that workers would have worn. Men’s clothing should be overalls or cotton trousers and an appropriate buttoned shirt (Bow Tie as per the era), and an appropriate hat (butcher, straw, or fedora types) for the era of early 1940s."},"8.6.6":{"h":"Blue Angel Volunteer Support Division (During Blue Angel Practice","t":"SEASON)"},"8.6.6.1":{"h":"Blue Angel Flight Line Team","t":"The appropriate dress code for volunteers working on the flight line is khaki slacks, capris or shorts, Blue Angel hats, tennis shoes with socks, which are the responsibility of the volunteer. White polo shirts with Blue Angels logo are provided by the Foundation so that all team members are uniform in appearance. Rain and cold weather jackets will be in Blue Angel colors and may have the Blue Angels logo, Museum logo, or volunteer patch, and are also the responsibility of the volunteer."},"8.6.6.2":{"h":"Blue Angel Autograph Team","t":"Volunteers are expected to dress appropriately including Polo Shirts with autograph team logo provided by the Foundation. Navy blue slacks and closed-toed shoes are the responsibility of the volunteer."},"8.6.7":{"h":"Modelers Volunteers","t":"All volunteers working in this area must wear clothing and footwear consistent with current safety regulations for their type of work. Staff will provide specific requirements."},"8.6.8":{"h":"Blazer/Coat Attachments","t":"A laminated volunteer badge must be worn at all times on the right lapel or a lanyard when a volunteer is on duty in the Museum. The embroidered Museum patch provided by the museum is to be worn on the left breast area or pocket of the blazer. Authorized items that are encouraged to be attached to the blazer or coat include aviator wings, the volunteer lapel pin, and the service hours pendant. Any other attachments that a volunteer may want to wear must be tasteful and appropriate. The VC is the final authority on attachments."},"8.6.9":{"h":"Footwear","t":"All volunteer footwear must be compatible with the uniform and job assignment. Sandals, flip flops, boat shoes, jogging shoes, sneakers, or other casual wear are not permitted. However, the VC may allow exceptions for special circumstances."},"8.6.10":{"h":"Dress Code Exceptions","t":"Active duty military personnel volunteering will wear the uniform of the day as directed by their parent command. If serving as a volunteer on liberty, military uniform of the day or divisional dress code will be allowed. If any volunteer feels that he/she cannot fully comply with the dress code requirements, their situation, with supporting rationale, must be presented to their DH and the VC, Depending on the circumstances, an exception may or may not be granted. The decision will be made by the VC."},"8.7":{"h":"Identification Credentials","t":""},"8.7.1":{"h":"Museum Name Tags","t":"All Museum volunteers are provided with a museum volunteer name badge after they have completed orientation. Name badges are to be worn and be visible whenever a volunteer is on duty in the Museum. The name badge is to be worn on the right lapel of the jacket or coat or at the same level on a shirt if no coat or jacket is being worn, or on a lanyard."},"8.7.2":{"h":"NAS Identification Card","t":"All volunteers are required to have in their possession a valid Naval Air Station (NAS) identification card while on the base. Note: Active duty and retired military personnel and their spouses, as well as DOD employees, should already have their military identification credentials. For other personnel that need a pass, the volunteer administrative office will provide the volunteer with an approved application (SF5512) (Attachment 19, Page 74). This application must be presented in person at the NAS Pass and ID Office at the front gate. Office hours are 7:30 a.m. to 3:30 p.m. Monday through Friday, except holidays. For questions for the Pass and ID Office call (850) 452-3969. The applicant must have a valid driver's license or other form of valid identification."},"8.7.3":{"h":"Departure Of Volunteers","t":"Upon leaving the volunteer program, volunteers must surrender all Museum name tags and time cards, and if applicable, Base Access ID cards issued by the NAS Pass and ID Office."},"8.8":{"h":"Scheduling Watch Hours","t":"The following procedures are used in scheduling volunteers for their work periods, and each volunteer is expected to fulfill their responsibilities as detailed below:"},"8.8.1":{"h":"Effective Days","t":"The effective days of the division's watch bills or schedules are from the first to the last day of the month."},"8.8.2":{"h":"Division Heads","t":"DHs will communicate with volunteers in their division to determine when the volunteers are available or desire to work each month. Every attempt will be made to honor the volunteer’s request. However, the needs of the Museum may require deviation from the volunteer's desires."},"8.8.3":{"h":"Proposed Schedules","t":"Proposed schedules must be given to the VC Office by the 20th of each month preceding the effective month of the watch or schedule so that they can be prepared for publishing."},"8.8.4":{"h":"Distribution","t":"A copy of each division's volunteer schedule will be e-mailed to respective volunteers approximately 5 days before the end of the month."},"8.8.5":{"h":"Unable To Stand A Watch","t":"Any volunteer unable to perform an assigned watch should contact their DH via text or e-mail at least the day before if able, or the day of, if ill. If unable to reach their DH, the Volunteer should contact the VC office at (850) 452-3605. If it is on a weekend or holiday, the volunteer should call the Museum Information Desk at (850) 452-2963 after 9 a.m., if the DH is not available."},"8.8.6":{"h":"Missing A Watch","t":"A volunteer who misses a scheduled watch without giving advanced notice will have this noted in his/her record. If a pattern of \"no-shows\" or persistently reporting late for a shift develops over several months, disciplinary action may be initiated."},"8.8.7":{"h":"Logging Watch Hours","t":"Each volunteer is responsible for entering their working hours. This is accomplished using the timecard and timecard readers located in the volunteer ready room and/or Bldg. 3221 (Restoration). A shift is considered 5 hours and is recorded for each volunteer automatically. Volunteers need to swipe the timecard, clock in and select the appropriate division they are working for that day. For days when a volunteer works longer than 5 hours, a secondary entry with the timecard is required to enter the second shift. Volunteers do not need to log out, as this is automatically completed. If a volunteer forgets a timecard and needs an entry made, simply enter the name and shift on the clipboard next to the timecard reader. The Volunteer Office will enter it manually. For any special project or unique volunteer hours that cannot be entered by timecard, notify the Volunteer Office and the time will be entered manually. Volunteers must notify the Volunteer Office if a timecard is lost."},"8.9":{"h":"Foundation Membership","t":"Volunteers are not required to join the Foundation in order to participate in the Museum volunteer program, However, volunteers may actively support the Museum through membership of the Foundation. A variety of membership levels are available with corresponding benefits. More information about the Foundation is available by visiting their offices on the second deck above the library or calling (850) 453- 2389."},"8.10":{"h":"Benefits","t":"Active volunteers who contribute at least eight hours of service per month (96 hours per year) will be eligible for the following benefits or perks after the indicated cumulative hours. Awards will be presented at the volunteer recognition socials."},"8.10.1":{"h":"INITIAL SERVICE (up to 500 hours)","t":"a) Monthly receipt of THE WORD - Volunteer Newsletter b) Invitation to volunteer recognition socials c) NAS identification card for non-military members d) Permanent plastic laminated name tag, door badge, timecard e) Museum Volunteer embroidered patch and lapel pin f) Discounts can be obtained by showing the Museum volunteer name tag at the following: The Giant Screen Theater The Museum Gift Shop The Simulators Museum Concessions (Note: Discounts are for volunteers only and not for any accompanying guests)\n8.10.2 500 HOURS SERVICE a) All of the above, plus b) Certificate of Recognition of 500 hours of service c) Museum Service Pin\n8.10.3 1,000-9,000 HOURS SERVICE a) All of the above, plus b) Certificates of recognition of 1,000-hour increments c) Museum Service Pin with hours\n8.10.4 10,000 HOURS SERVICE a) All of the above, plus b) Certificate mounted on wooden plaque c) Watch"},"8.11":{"h":"Organization Protocol","t":"Each volunteer is expected to know and follow the chain of command that governs the volunteer organization and the Museum and Foundation relationship. When a volunteer faces a situation, they feel requires, or may require, higher resolution, they must follow the chain of command and procedures as outlined in the paragraphs below. The volunteer must never jump the chain of command as this will, in most cases, delay the resolution of the problem."},"8.12":{"h":"Grievance Procedure","t":"If a volunteer should have a complaint or grievance of any kind, the volunteer should first discuss the problem with their DH. If a satisfactory resolution cannot be reached, the topic will be referred to the VC. During the study and attempted resolution by the VC, the Deputy Director will be updated regularly on the situation. Anytime the situation cannot be satisfactorily resolved by the VC, the Deputy Director has final authority to resolve the issue."},"8.13":{"h":"Discipline/Termination Procedure","t":""},"8.13.1":{"h":"Violations","t":"All Museum volunteers are expected to conform to all the requirements specified in this Guidebook. Failure to meet these requirements or to maintain commitment to the volunteer program and Museum will result in individual counseling and may result in termination from the program."},"8.13.2":{"h":"First Action And Referral","t":"The DH for the division to which the volunteer is assigned will address such cases first. As a first step, the DH must review this section of the Guide with the volunteer. The DH will then counsel the volunteer on the subject violation(s) and recommend corrections.\nThe DH will keep a written record of all violations, counseling, and results. If the violation(s) is of a serious nature and/or it is determined that the counseling is ineffective as demonstrated by continued violation(s), the DH will refer the case to the VC."},"8.13.3":{"h":"Referral To Volunteer Coordinator","t":"The VC will review the case using written record(s) and will inform the Deputy Director. The VC may elect to interview and/or discuss the violations with the volunteer and DH. Following a review of the case, the VC has the authority to recommend further corrective counseling, training, reassignment, etc. If the VC attempts to rectify the situation and his/her efforts fail to result in a satisfactory outcome, the VC will refer the case to the Deputy Director recommending the volunteer be terminated from the program. The Deputy Director may direct additional corrective counseling, training, reassignment, etc. or may direct the volunteer be terminated from the program. Only the Deputy Director may terminate a volunteer. The termination of a volunteer from the program will be performed by the VC at the direction of the Deputy Director.\nThis is information all volunteers should know. Walk around the Museum and familiarize yourself with the following:"},"9.1":{"h":"Volunteer Entrance","t":"Volunteers may enter through the West Wing volunteer/service entrance on any day. These doors are normally open at 7:00 a.m. Monday through Friday. On weekends and Federal Holidays they open at 8:00 a.m."},"9.2":{"h":"Volunteer Coordinator/ MilVol Coordinator Office","t":"Open 8:00 a.m. — 4:00 p.m. on normal workdays. It is closed on weekends and Federal holidays."},"9.3":{"h":"Break Room/Ready Room","t":"Open every day from 7:00 a.m. — 5:00 p.m. (Mon-Friday, and at 8:00 a.m. on weekends and holidays). This is where volunteers clock in to record their hours, obtain a radio, and receive a briefing on the activities in the museum for the shift/day. There is a refrigerator, microwave, water cooler, coffee pot, and lockers in the break room for use by volunteers."},"9.4":{"h":"Public Telephones","t":"There are no public telephones in the Museum. Volunteers may make local calls from the volunteer administrative office. Dial 99 Area~-Code-Number for on base only calls. Dial 98-Area Code-Number for all off base calls. Toll calls must be official business and approved by the Volunteer Coordinator. Phones at the Information Desk are for official business only."},"9.5":{"h":"U.S. Mailbox","t":"The Museum has one public U.S. Mailbox outside near the front entrance."},"9.6":{"h":"Giant Screen Ticket Counter","t":"Tickets for the Giant Screen Theater and simulators are purchased at the concessions counter. Pre-scheduled groups with reserved tickets also check in at the ticket counter. Details concerning feature titles and feature times are available at the Information desks."},"9.7":{"h":"Small Theater","t":"This theater is located next to the Cubi Bar and is used for special meetings such as volunteer training sessions or all hands meetings."},"9.8":{"h":"Radford Room","t":"Located on the West Side of the Museum close to Concessions Area and Blue Angel Cockpits. The room is used for special meetings and/or training sessions."},"9.9":{"h":"Museum Administrative Offices","t":"These offices are located on the Mezzanine above the library research and archival offices. To reach these offices, take the stairs to the left of the large glass Library doors."},"9.10":{"h":"Museum Operations/Maintenance Division","t":"To reach these offices, take the main deck stairway to the left of the atrium. Enter the ship's hatch."},"9.11":{"h":"Lost and Found","t":"This is located in the Museum Operations/Maintenance Division office. Take the main deck stairway to the left of the atrium."},"9.12":{"h":"Flight Adventure Deck","t":"This activity is located on the second deck above the Cubi Bar."},"9.13":{"h":"Home Front","t":"This area is on the second deck located above the volunteer office."},"9.14":{"h":"Modelers","t":"This area is located in the Aircraft Preservation and Maintenance Building (BLDG 3221)."},"9.15":{"h":"Foundation Offices","t":"These offices are found on the second deck inside the double glass doors, next to the Legacy Wall, above the library."},"9.16":{"h":"Hangar Bay One (HBO)","t":"This display area contains post Korean War aircraft up to more recent modern era aircraft. It is located immediately behind the main building."},"9.17":{"h":"Aircraft Preservation and Maintenance Building","t":"All volunteers are welcome to tour the Aircraft Preservation and Maintenance Building (BLDG 3221).\nRequest the VC or your DH to coordinate a visit for you. This hangar is located behind Hangar Bay One and inside the fenced in area."},"9.18":{"h":"Volunteer Parking","t":"Designated parking is located just west of the volunteer/service entrance. Volunteers may park there or in any undesignated parking spot in the parking lot. Do not park in VIP spaces or spots designated for Museum officers or staff. Laminated ‘Volunteer Parking’ placards are provided to volunteers for use when parking in areas designated for volunteer parking. The placard should be placed inside the vehicle where it is easily visible. Placards may also be necessary to gain entrance to the Museum parking lot on special event days."},"9.19":{"h":"Picnic Areas","t":"There are several picnic areas. One is located along the access road that goes by the Cubi Bar entrance. Another picnic area (covered) is located on the access road at the rear of the Museum and in front of the Aircraft Preservation and Maintenance Building. Additionally, picnic tables are located under the trees east of Hangar Bay One (HBO) and between the main building and HBO. All areas are used on first come first serve basis. No reservations are necessary. Unattended items such as coolers, backpacks, luggage, etc., are not allowed in picnic areas. This presents a potential security threat."}};
+const ATT = {
+ 2:["Initial Training Checklist","Required: Volunteer Coordinator interview, Museum orientation, morning and afternoon Visitor Support, morning and afternoon Information Desk, one Home Front watch, and a final interview (badge, timecard, assignment). Recommended: attend a Blue Angels practice."],
+ 3:["Volunteer Agreement Form","Signed after all initial training is finished."],
+ 7:["Docent Qualification Sheet","Shadow at least 10 tours with different Docents. Then give three tours observed by three Docents chosen by the Division Head, plus one tour for the Division Head, including Hangar Bay One. The Volunteer Coordinator signs off."],
+ 8:["Information Desk / HBO Qualification Sheet","Covered with a mentor on each desk: Hangar Bay One procedures (ideally 2:00–3:30 p.m.), normal duties, emergencies, announcements, visitor rules, services, exhibit locations and closing. Mentor and trainee initial a morning and an afternoon watch."],
+ 9:["Visitor Support Qualification Sheet","Assuming the watch, using the radio, the code words, emergency equipment locations, watch routine, guest relations, what to know, closing and end of watch. Mentor and trainee initial a morning and an afternoon watch."],
+ 10:["Flight Adventure Deck Tour Guide Checklist","Two afternoon shadow tours, then one tour given by the trainee with a supporting guide. The form goes to the Education Office in the Foundation area."],
+ 11:["Home Front Qualification Sheet","Exhibit introduction, meet the Division Head, exhibit key location, exhibit history, opening and closing, and four mentor-assisted presentations (two morning, two afternoon). A Home Front binder is issued."],
+ 12:["Blue Angel Flight Line Team Sheet","One year as a volunteer in good standing. Stand three hours in heat above 100°, cold or rain without shade. Comfortable speaking to large groups. Practices are normally Tuesday and Wednesday, mid-March through mid-November."],
+ 13:["Blue Angel Autograph Team Sheet","Stand and walk about two hours, including setting up and taking down the Atrium tables. Explain how the lines work and the limits on items to sign."],
+ 14:["Modelers Qualification Sheet","Scale accuracy, modeling materials, adhesives and primers, safe tool use, handling solvents, and familiarity with safety data sheets. Mentor, Division Head and Volunteer Coordinator sign off."],
+ 15:["Recognition Events SOP","Submit the event request, meet the program manager, meet the Events Division Head once approved, then brief and debrief with the number of participants."],
+ 16:["Speakers Bureau / Outreach SOP","Submit requests in writing with date, time, audience and topic. Check everything presented for historical accuracy with Hill Goodspeed. Report the audience response and count afterward."],
+ 17:["NNAM Pet Policy (10 June 2024)","Only service animals may enter Museum buildings. Emotional-support, therapy, comfort and companion animals do not qualify. Two questions may be asked. Removal only if the animal is out of control or not housebroken. No service animals on the flight line."]
+};
+
+/* ---------- Plain-English word list (dotted words) ---------- */
+const G = {
+ "Watch":"A scheduled volunteer shift. The Navy calls a duty period a watch; the person on it is a watchstander.",
+ "Ready Room":"The volunteers' break room next to the Volunteer Coordinator's office. Clock in, pick up a radio and hear the shift briefing here. It has a fridge, microwave, coffee and lockers.",
+ "Plan of the Day":"The day's schedule of ceremonies, dinners and special tours. Posted at the Information Desk and in the Ready Room.",
+ "Channel 2":"The normal radio channel. It is not private: anyone near another radio hears you.",
+ "Hangar Bay One":"The large display hall directly behind the main building, opened in 2010. It holds aircraft from after the Korean War to today, plus an Apollo space exhibit. Closes at 3:30 p.m.",
+ "HBO":"Short for Hangar Bay One, the display hall behind the main building.",
+ "Division Head":"The volunteer who leads your division (for example, Visitor Support). Your first contact for schedules, absences and questions.",
+ "Volunteer Coordinator":"Museum staff member who runs the volunteer program day to day: schedules, shift briefings, hours and placement. Office (850) 452-3605.",
+ "Muster":"Gather at a set spot so everyone can be counted. After an evacuation, volunteers muster at the southwest corner of the main parking lot.",
+ "second deck":"Navy word for the upper floor. The ground floor is the lower deck.",
+ "lower deck":"Navy word for the ground floor.",
+ "Atrium":"The Blue Angel Atrium, the tall open hall in the West Wing where the Blue Angel jets hang.",
+ "Cubi Bar Café":"The Museum's café, a re-creation of the famous officers' club at Cubi Point in the Philippines. One of the few places food and drink are allowed.",
+ "Giant Screen Theater":"The Museum's 534-seat movie theater. Visitors shelter here in a tornado warning. Volunteers with a Museum ID see films free.",
+ "Flight Adventure Deck":"A hands-on science classroom on the second deck above the Cubi Bar Café. Closed to the public except for guided tours.",
+ "FAD":"Short for Flight Adventure Deck, the hands-on science classroom.",
+ "Home Front":"A second-deck exhibit re-creating a small American downtown during World War II: grocery, 1943 home, storefronts and movie theater.",
+ "Sunken Treasures":"An exhibit area out of easy view, so Visitor Support checks it while roving and at closing.",
+ "AED":"Automated External Defibrillator: a portable device that can restart a heart. It talks you through each step. Any volunteer may use one.",
+ "FOD":"Foreign Object Debris: loose trash or objects that could be sucked into a jet engine. The flight line must be FOD-free.",
+ "Docent":"A trained volunteer tour guide who leads tours of the aircraft and exhibits.",
+ "Foundation":"The Naval Aviation Museum Foundation, a separate private charity that raises money for the Museum. Offices on the second deck above the library.",
+ "Bldg 3221":"The Aircraft Preservation and Maintenance building (restoration hangar) behind Hangar Bay One, inside the fence.",
+ "SF 5512":"The application form for a base access pass, for volunteers who do not already have a military or Defense Department ID.",
+ "shelter in place":"Stay inside, out of sight and behind cover, until help arrives, instead of leaving the building.",
+ "memory item":"An emergency step marked with a star (*). Know it by heart, without the book.",
+ "flight line":"The area north of the Museum where the public watches Blue Angels practices.",
+ "Visitor Support":"Volunteers who roam the Museum and Hangar Bay One to help guests and keep aircraft, exhibits and people safe.",
+ "Information Desk":"The desk inside the main entrance; the first stop for visitors. (850) 452-2963.",
+ "Carrier Ready Room":"A second-deck exhibit re-creating a carrier squadron's briefing room. Its chairs sit on mats and have seat belts.",
+ "Guadalcanal":"A World War II display on the second deck, next to Home Front.",
+ "Plan":"",
+ "BARNEY":"Code word: staff are urgently needed at a location, without saying why.",
+ "OPIE":"Code word: bomb threat.",
+ "ADAM":"Code word: lost child.",
+ "CODE RED":"Code word: fire.",
+ "CHARLIE":"Code word: active shooter, or anyone with a weapon who is not uniformed police.",
+ "GRANGER":"Code word: any other security problem, such as a weapon found in a bag or an unattended package."
+};
+delete G.Plan;
+
+/* ---------- Content model ----------
+   ['h',t] ['h4',t] ['h5',t] ['rev',a,b] ['p',t] ['cond',t] ['grp',t] ['idx',[[label,id]]] ['ul',[..]]
+   ['warning'|'caution'|'note', t|[..]] ['tbl',[head],[[cells]]]
+   ['s',item,resp,{c:critical, t:item tip, r:response tip, f:guide-conflict note}]   numbering restarts after each heading
+   page.ref = "6.5 · Att 9"  (Guide paragraph references, shown with the Guide's own text) */
+const S_=(i,r,o={})=>['s',i,r,o];
+const FRONT = [
+ {id:"title",num:"",paper:"white",kind:"cover"},
+ {id:"A",num:"A",paper:"white",blocks:[
+  ['h',"LIST OF EFFECTIVE PAGES"],
+  ['p',"Dates of issue for original and changed pages are:"],
+  ['tbl',["Issue","Date"],[["Original … 0","22 Oct 2026"]]],
+  ['p',"Total number of pages in this checklist is 42, consisting of the following:"],
+  ['tbl',["Page No.","Change No."],[["Title","0"],["A – B","0"],["1-1 – 1-9","0"],["2-1 – 2-9","0"],["3-1 – 3-9","0"],["Emergency Title","0"],["E-1 – E-11","0"]]],
+  ['note',"Zero in the Change No. column means an original page. Source: NNAM Volunteer Guide, revised 20 March 2025."]]},
+ {id:"B",num:"B",paper:"white",blocks:[
+  ['h',"HOW TO READ THIS CHECKLIST"],
+  ['p',"Each line names something to check, then what it should be. Read it as “item: action.”"],
+  S_("Radio","ON",{t:"The thing to check or do.",r:"What it should be, or what to do. Tap the line to check it off."}),
+  ['p',"A star (*) marks a [[memory item]]: an emergency step to know by heart."],
+  ['p',"An italic line beginning <i>If</i> applies only in that situation."],
+  ['warning',"Something that could hurt you or someone else if not followed."],
+  ['caution',"Something that could cause damage, embarrassment or trouble for you or the Museum."],
+  ['note',"Helpful extra information."],
+  ['p',"Dotted words have a plain-English explanation. Point at them with a mouse, or press and hold on a phone. Guide references at the bottom of each page open the Guide's own wording."],
+  ['p',"A dagger (†) means two parts of the Volunteer Guide disagree. The explanation tells you how."],
+  ['p',"Times are Museum local time (Central)."]]},
+ {id:"n1",num:"1-1",tab:"norm",paper:"white",blocks:[
+  ['h',"NORMAL PROCEDURES"],
+  ['idx',[["Arrival and Sign-In","n2"],["Radio Check-Out","n3"],["Visitor Support Watch","n4"],["Visitor Rules","n5"],["Service Animals","n6"],["Museum Closing","n7"],["End of Watch","n8"],["Can't Make Your Watch","n9"]]],
+  ['note',"Information Desk duties and announcements are under Divisions, page 2-3."]]},
+ {id:"n2",num:"1-2",tab:"norm",paper:"white",ref:"8.5.5 · 8.6.8 · 8.7.2 · 8.8.7 · 9.1 · 9.3 · 9.18",blocks:[
+  ['h',"ARRIVAL AND SIGN-IN"],
+  S_("Base ID card","IN YOUR POSSESSION",{t:"Required at all times on Naval Air Station Pensacola. Military members, retirees, spouses and Defense Department employees use their own ID. Others get a base pass with form [[SF 5512]] from the volunteer office."}),
+  S_("Meal","EATEN BEFORE SHIFT",{t:"Eat before you report. If you work both shifts in a day, you may take a 30-minute lunch between them."}),
+  S_("Uniform","CHECKED (PAGE 3-4)"),
+  S_("Parking","VOLUNTEER AREA",{t:"Just west of the volunteer entrance, or any unmarked spot. Never VIP, officer or staff spaces.",r:"Put your Volunteer Parking placard where it can be seen. It may be needed to enter the lot on special-event days."}),
+  S_("Entrance","BLUE AWNING, WEST SIDE",{r:"The volunteer and service entrance. Opens 7:00 a.m. on weekdays, 8:00 a.m. on weekends and federal holidays."}),
+  S_("Name badge","RIGHT LAPEL OR LANYARD",{r:"Visible whenever you are on duty."}),
+  S_("Timecard","SWIPED, DIVISION SELECTED",{t:"Readers are in the [[Ready Room]] and Bldg 3221. Forgot your card? Write your name and shift on the clipboard beside the reader."}),
+  S_("Shift briefing","ATTENDED",{t:"Given in the Ready Room. Covers the day's events and anything unusual."}),
+  S_("[[Plan of the Day]]","REVIEWED"),
+  ['note',"Shifts: morning 8:45 a.m. – 12:30 p.m.; afternoon 12:15 – 4:00 p.m. (closing)."]]},
+ {id:"n3",num:"1-3",tab:"norm",paper:"white",ref:"6.8 · Att 9",blocks:[
+  ['h',"RADIO CHECK-OUT"],
+  S_("Radio check-out log","SIGNED",{t:"The log is in the Ready Room."}),
+  S_("Charger light","ON (FULLY CHARGED)"),
+  S_("Power","ON"),
+  S_("Channel","2",{r:"[[Channel 2]] is the normal channel."}),
+  S_("Volume","SET"),
+  S_("Push-to-talk bar","LOCATED",{t:"Press and hold it to talk; release it to listen."}),
+  S_("Radio check","AS DESIRED",{r:"Optional: ask someone to confirm they hear you."}),
+  ['caution',"Channel 2 is not private. Anyone near another radio hears you. Use the code words (page E-11) instead of describing an emergency."],
+  ['note',"Keep your radio on at all times, even on breaks."]]},
+ {id:"n4",num:"1-4",tab:"norm",paper:"white",ref:"7.8.5 · Att 9",blocks:[
+  ['h',"VISITOR SUPPORT WATCH"],
+  S_("[[Information Desk]]","CHECK IN AT LEAST ONCE"),
+  S_("Roving","CONTINUOUS",{t:"Keep moving through the main floor, the [[second deck]] and [[Hangar Bay One]]."}),
+  S_("Out-of-sight areas","EXTRA ATTENTION",{t:"<p>Areas where guests are out of easy view:</p><ul><li>Sunken Treasures</li><li>Carrier Ready Room and Guadalcanal (second deck)</li><li>Behind the Atrium stage</li><li>Flight Adventure Deck (second deck)</li><li>Lighter-than-Air exhibit (second deck)</li><li>Home Front when unstaffed (second deck)</li></ul>"}),
+  S_("[[Carrier Ready Room]] chairs","ON MATS, BELTS STRAIGHT"),
+  S_("Breaks","2 IN MUSEUM, 1 IN HBO",{r:"Take breaks so at least two volunteers stay in the main Museum and at least one in Hangar Bay One."}),
+  S_("Floors on rainy days","HOUSEKEEPING CALLED IF WET"),
+  S_("Guests","HELPED AS NEEDED",{t:"Greet, answer questions, give directions, and tell guests about the aircraft and displays."}),
+  ['warning',"Do not touch children or any other guests."],
+  ['caution',"Visitor Support volunteers cannot detain or reprimand a guest or call Base Police. Watch, report, and call staff."]]},
+ {id:"n5",num:"1-5",tab:"norm",paper:"white",ref:"6.1.1 – 6.1.8 · 6.3",blocks:[
+  ['h',"VISITOR RULES"],
+  ['tbl',["Rule","Limit"],[
+   ["Shoes and shirts","Required for anyone old enough to walk"],
+   ["Children under 16","With an adult at all times"],
+   ["School or Scout groups","1 adult for every 10 children"],
+   ["Food and drink","Café and concessions only. Capped water bottles are fine."],
+   ["Bags","Clear bags of any size, or a small clutch purse. Uniformed military may carry a backpack."],
+   ["Luggage","Not allowed; the visitor is turned away"],
+   ["Smoking, vaping","Not allowed"],
+   ["Balloons, balls, skate shoes, throwing","Not allowed"],
+   ["Running, climbing on aircraft, going past ropes","Not allowed"],
+   ["Photos and video","Allowed in public areas"]]],
+  ['h5',"When a visitor breaks a rule"],
+  S_("Visitor","TOLD POLITELY",{t:"Explain the Museum policy respectfully and ask them to comply. A quiet word usually works."}),
+  ['cond',"If it becomes a confrontation:"],
+  S_("Museum staff","CALLED"),
+  ['note',"If someone is about to get hurt (running, for example), act right away."]]},
+ {id:"n6",num:"1-6",tab:"norm",paper:"white",ref:"6.10 · Att 17",blocks:[
+  ['h',"SERVICE ANIMALS"],
+  S_("Visitor with an animal","ADVISED: NO PETS",{r:"In a pleasant tone: “We are sorry, but no pets are allowed in the Museum.”"}),
+  ['cond',"If the visitor says it is a service animal:"],
+  S_("Questions","TWO ONLY",{r:"<p>1. Is the animal a service animal required because of a disability?</p><p>2. What work or task has the animal been trained to perform?</p>"}),
+  S_("Disability, papers, certificates","DO NOT ASK"),
+  ['cond',"If the visitor says it is a therapy, anxiety or comfort animal:"],
+  S_("Visitor","ADVISED: NOT ALLOWED",{r:"“The Museum does not allow Therapy, Anxiety, or Comfort Animals inside the Museum.”"}),
+  ['cond',"If the animal is out of control or not housebroken, or you are unsure:"],
+  S_("Museum staff","CALLED"),
+  ['note',"Service animals are dogs (and, in Florida, miniature horses) trained to do a task for a person with a disability. Emotional-support and comfort animals do not qualify."],
+  ['caution',"Service animals may not go on the [[flight line]] during Blue Angels practice. Invite the visitor to watch from the areas beside it."]]},
+ {id:"n7",num:"1-7",tab:"norm",paper:"white",ref:"6.2 · Att 9",blocks:[
+  ['h',"MUSEUM CLOSING"],['h4',"(Visitor Support)"],
+  S_("3:30 p.m. — Ready Room coffee pot","OFF, EMPTIED"),
+  S_("3:30 p.m. — Hangar Bay One","CLOSES"),
+  S_("3:50 p.m. — [[Atrium]]","MEET, SWEEP TO EXIT",{t:"All Visitor Support and military watchstanders meet in the Atrium, then fan out and work toward the front door, guiding visitors to the exit."}),
+  S_("3:50 p.m. — Out-of-sight areas","CHECKED",{r:"Flight Adventure Deck, behind the blue curtains in the Atrium, Sunken Treasures, restrooms, and the ready room next to Guadalcanal."}),
+  S_("3:55 p.m. — All sections","NO GUESTS REMAIN"),
+  S_("4:00 p.m. — Information Desk","REPORT, WAIT FOR LOCKUP",{r:"Stand by until a staff member arrives to lock the front doors."}),
+  ['note',"Information Desk closing announcements are on page 2-3."]]},
+ {id:"n8",num:"1-8",tab:"norm",paper:"white",ref:"6.4.1 · 8.8.7 · Att 9",blocks:[
+  ['h',"END OF WATCH"],
+  S_("Radio","OFF, IN CHARGER"),
+  S_("Charger light","ON"),
+  S_("Radio log","INITIALED"),
+  S_("Found items","TO INFORMATION DESK",{t:"Lost items found during the day go to the Information Desk. Unclaimed items go to staff at closing."}),
+  S_("Timecard","NOTHING TO DO",{r:"You do not clock out; it is automatic. If you worked more than 5 hours, swipe again to record the second shift."}),
+  S_("Special-project hours","REPORTED TO VOLUNTEER OFFICE"),
+  S_("Lost timecard","REPORTED TO VOLUNTEER OFFICE")]},
+ {id:"n9",num:"1-9",tab:"norm",paper:"white",ref:"8.8.1 – 8.8.6",blocks:[
+  ['h',"CAN'T MAKE YOUR WATCH"],
+  S_("[[Division Head]]","TEXT OR EMAIL",{r:"At least the day before if you can; the same day if you are sick."}),
+  ['cond',"If you can't reach your Division Head:"],
+  S_("Volunteer Office","(850) 452-3605"),
+  ['cond',"On a weekend or holiday:"],
+  S_("Information Desk (after 9 a.m.)","(850) 452-2963",{t:"The Volunteer Office is closed on weekends and federal holidays."}),
+  ['caution',"Missing a watch without notice is noted in your record. A pattern of no-shows or late arrivals over several months can lead to disciplinary action."],
+  ['h5',"Monthly schedule"],
+  ['tbl',["When","What happens"],[["Each month","Your Division Head asks when you can work"],["By the 20th","Proposed schedules go to the Volunteer Office"],["About 5 days before month end","Schedules are emailed to volunteers"],["1st – last day","Schedule in effect"]]]]},
+
+ {id:"d1",num:"2-1",tab:"div",paper:"white",blocks:[
+  ['h',"VOLUNTEER DIVISIONS"],
+  ['idx',[["Visitor Support","d2"],["Information Desk / Hangar Bay One","d3"],["Library / Collections","d4"],["Docents","d5"],["Flight Adventure Deck","d6"],["Home Front","d7"],["Blue Angels Teams","d8"],["Other Divisions","d9"]]],
+  ['note',"Every volunteer starts with Visitor Support, Information Desk and Home Front watches. To join another division, talk to the Volunteer Coordinator."]]},
+ {id:"d2",num:"2-2",tab:"div",paper:"white",ref:"7.8.5 · 8.3 · Att 2 · Att 9",blocks:[
+  ['h',"VISITOR SUPPORT"],
+  ['p',"[[Visitor Support]] volunteers keep guests safe and comfortable, watch over the aircraft and exhibits, and act as roving greeters in the main Museum and Hangar Bay One."],
+  ['tbl',["Item","Detail"],[["Shifts","8:45 a.m. – 12:30 p.m. and 12:15 – 4:00 p.m."],["Where","Main Museum, second deck, Hangar Bay One"],["Uniform","Navy blazer, dress shirt or blouse; tie optional (page 3-4)"],["Training","A morning and an afternoon watch with a mentor"]]],
+  ['h5',"Your watch, page by page"],
+  ['idx',[["Arrival and Sign-In","n2"],["Radio Check-Out","n3"],["Visitor Support Watch","n4"],["Museum Closing","n7"],["End of Watch","n8"],["Radio Code Words","e11"]]]]},
+ {id:"d3",num:"2-3",tab:"div",paper:"white",ref:"6.4 · 6.7 · 7.8.4 · Att 8",blocks:[
+  ['h',"INFORMATION DESK / HBO"],
+  ['p',"The first people visitors meet. Two or more volunteers per watch answer questions about the Museum, the base and the Pensacola area."],
+  S_("[[Plan of the Day]]","REVIEWED"),
+  S_("Desk supplies","STOCKED, ORGANIZED"),
+  S_("Found items","LOGGED, HELD UNTIL DAY END"),
+  S_("Visitor reporting a loss","NAME, ADDRESS, DESCRIPTION",{r:"Written down and given to staff at closing."}),
+  S_("Wheelchairs, strollers","LOANED, LOGGED"),
+  S_("Tips or gifts offered","DONATION BOX OR FOUNDATION",{t:"Volunteers may not accept tips or gifts."}),
+  S_("Event requests","MILITARY EVENTS COORDINATOR",{r:"School field trips go to the Giant Screen Theater office, behind the snack bar."}),
+  ['h5',"Closing announcements"],
+  S_("3:30 p.m.","GIFT SHOP CLOSES IN 30 MIN",{f:"The Visitor Support sheet (Attachment 9) lists a single “closing” announcement at 3:50 p.m. The Information Desk sheet (Attachment 8) gives the four times shown here. Ask your Division Head which is current."}),
+  S_("3:45 p.m.","MUSEUM CLOSES IN 15 MIN"),
+  S_("3:55 p.m.","MUSEUM CLOSES IN 5 MIN"),
+  S_("4:00 p.m.","MUSEUM IS NOW CLOSED"),
+  S_("Desk and counter","CLEAN, ORDERLY"),
+  S_("Unclaimed lost items","TO STAFF"),
+  ['note',"Hangar Bay One desk: closing announcements before 3:30 p.m., then the radio goes in its charger."]]},
+ {id:"d4",num:"2-4",tab:"div",paper:"white",ref:"3.2 · 7.8.2 · 7.9.2 · 8.3.2 · 8.6.2 · 9.9",blocks:[
+  ['h',"LIBRARY / COLLECTIONS"],
+  ['p',"The Emil Buehler Naval Aviation Library holds the papers of prominent Naval Aviators, squadron records and hundreds of thousands of photographs. Researchers come from around the world."],
+  ['p',"Volunteers help the Museum's archivist and staff with curatorial and archival work:"],
+  ['ul',["Researching naval aviation history","Cataloging, processing and filing manuals, documents, photographs and books","Greeting visitors at the reference desk in the library lobby"]],
+  ['tbl',["Item","Detail"],[["Hours","9:00 a.m. – 4:00 p.m., Monday – Friday"],["Helpful background","Naval or general aviation, military history, research, computers"],["Skills sought","Phone and public contact; cataloging; inventory; scanning and records"],["Dress","Professional, neat and clean"],["Internships","On the recommendation of the curators and archivists"]]],
+  ['h5',"Getting started"],
+  S_("Interest","TOLD TO VOLUNTEER COORDINATOR"),
+  S_("Library tour","ARRANGED WITH LIBRARY DIVISION HEAD",{r:"A tour can be done during a Visitor Support or Information Desk watch, but must be arranged in advance."}),
+  ['note',"The Guide has no step-by-step library procedures. Training is given by the Library staff."]]},
+ {id:"d5",num:"2-5",tab:"div",paper:"white",ref:"7.8.3 · Att 7",blocks:[
+  ['h',"DOCENTS"],
+  ['p',"[[Docent]]s lead scheduled and special tours of the aircraft and exhibits, and may speak to civic groups. Visitors treat them as experts on Navy, Marine Corps and Coast Guard aviation."],
+  ['h5',"Path to qualify"],
+  S_("Tours with a Docent","FOLLOW AT LEAST 2",{t:"Recommended before deciding to train, to see how much there is to learn."}),
+  S_("Shadow tours","10, WITH DIFFERENT DOCENTS"),
+  S_("Evaluated tours","3, PLUS 1 FOR DIVISION HEAD",{r:"Each observed by a different Docent; must include Hangar Bay One."}),
+  S_("Final sign-off","VOLUNTEER COORDINATOR"),
+  ['note',"Once qualified: at least two tours a month. A Docent Reader's File is kept in the Ready Room, and the Library is open for research."]]},
+ {id:"d6",num:"2-6",tab:"div",paper:"white",ref:"7.8.6 · Att 10",blocks:[
+  ['h',"FLIGHT ADVENTURE DECK"],
+  ['p',"The [[Flight Adventure Deck]] teaches the science of flight. School groups use it on weekday mornings; volunteer guides give public tours, normally at 1, 2 and 3 p.m."],
+  S_("Clock in","TOUR COUNT SHEET TAKEN"),
+  S_("Radio","CHECKED OUT, LOGGED"),
+  S_("FAD staff","AVAILABILITY CONFIRMED"),
+  S_("Information Desk","TOLD TOUR TIMES"),
+  S_("Entrance","10 MIN BEFORE THE HOUR"),
+  S_("Unaccompanied children","NOT ACCEPTED",{r:"The FAD is out of public view, so minors must be with a parent or adult relative."}),
+  S_("Tour","START ON THE HOUR"),
+  S_("Door tapes","CLOSED BEHIND GROUP"),
+  S_("Radio","CARRIED",{r:"Announcements can't be heard inside the FAD."}),
+  S_("Tour count","RECORDED"),
+  ['note',"Rooms in order: Montgolfier, Galileo, Space Scale, Newton's Law, Atmosphere and Air Pressure, Effects of Air Pressure, Aerostatics, Bernoulli Blower."]]},
+ {id:"d7",num:"2-7",tab:"div",paper:"white",ref:"7.8.7 · 8.6.5 · Att 11",blocks:[
+  ['h',"HOME FRONT"],
+  ['p',"[[Home Front]] recreates a small American downtown during World War II, between the Guadalcanal and Theater displays on the second deck. Volunteers watch over the exhibit and tell visitors what life was like at home during the war."],
+  ['tbl',["Item","Detail"],[["Dress","Standard blazer uniform, or early-1940s clothing with Division Head approval"],["Reference","Each volunteer receives a Home Front binder; return it when you leave"],["Training","Exhibit history, opening and closing, and 4 mentor-assisted talks"]]],
+  ['note',"Every new volunteer stands one Home Front watch during initial training."]]},
+ {id:"d8",num:"2-8",tab:"div",paper:"white",ref:"7.8.8.1 · 7.8.8.2 · 8.6.6.1 · 8.6.6.2 · Att 12 · Att 13",blocks:[
+  ['h',"BLUE ANGELS TEAMS"],
+  ['h5',"Flight Line Team"],
+  ['p',"Sets up the viewing area, wipes down bleachers, answers questions, watches for heat illness, and returns the [[flight line]] to a clean, [[FOD]]-free condition. 1,200 – 3,500 visitors per practice."],
+  ['ul',["At least one year as a volunteer, in good standing","Able to stand 3 hours in heat over 100°, cold or rain, without shade","Comfortable speaking to large groups"]],
+  ['h5',"Autograph Team"],
+  ['p',"Keeps the autograph lines orderly so fans get as many signatures as possible. Sessions run 30 – 45 minutes, usually on a Wednesday after practice; about 2 hours with setup."],
+  ['note',["Practice season: mid-March through the end of October (Guide 7.8.8.1).† The Flight Line Team sheet says mid-November.","Blue Angels season duty counts toward your hours; off-season you return to another division."]]]},
+ {id:"d9",num:"2-9",tab:"div",paper:"white",ref:"4 · 7.8.1 · 7.8.9 · 7.8.10 · 7.8.11",blocks:[
+  ['h',"OTHER DIVISIONS"],
+  ['tbl',["Division","What volunteers do"],[
+   ["Aircraft Preservation & Maintenance","Restore aircraft to display condition in [[Bldg 3221]]: sheet metal, corrosion control, welding, paint prep, machining. Weekday mornings; usually two watches a week."],
+   ["Modelers","Repair, restore and build scale models for exhibits; may teach youth model-building workshops."],
+   ["Speakers Bureau / Outreach","Prepare and give talks on naval aviation history to schools, civic and military groups."],
+   ["Recognition Events","Help plan and set up volunteer recognition dinners and socials."],
+   ["Navigators Education Team","Foundation education volunteers: Scout Saturday, Homeschool Academy, field trips. Education Director (850) 308-8935."]]]]},
+
+ {id:"r1",num:"3-1",tab:"ref",paper:"white",blocks:[
+  ['h',"REFERENCE DATA"],
+  ['idx',[["Hours","r2"],["Phone Numbers","r3"],["Uniform","r4"],["Where Things Are","r5"],["Hours Required and Awards","r6"],["Who to Ask and Conduct","r7"],["Museum Facts","r8"],["Words to Know","r9"]]]]},
+ {id:"r2",num:"3-2",tab:"ref",paper:"white",ref:"6.2 · 7.8.2 · 8.7.2 · 9.1 · 9.2 · 9.3",blocks:[
+  ['h',"HOURS"],
+  ['tbl',["Place","Hours"],[
+   ["Museum","9:00 a.m. – 4:00 p.m. daily. Closed Thanksgiving, Christmas and New Year's Day."],
+   ["Hangar Bay One","Closes 3:30 p.m."],
+   ["Morning watch","8:45 a.m. – 12:30 p.m."],
+   ["Afternoon watch","12:15 – 4:00 p.m."],
+   ["Volunteer entrance","Opens 7:00 a.m. weekdays; 8:00 a.m. weekends and holidays"],
+   ["Ready Room","7:00 a.m. – 5:00 p.m.;† from 8:00 a.m. weekends and holidays"],
+   ["Volunteer Office","8:00 a.m. – 4:00 p.m. workdays. Closed weekends and holidays."],
+   ["Library","9:00 a.m. – 4:00 p.m., Monday – Friday"],
+   ["Base Pass & ID Office","7:30 a.m. – 3:30 p.m., Monday – Friday"]]],
+  ['note',"† The Guide's revision log says the Ready Room now closes at 4:00 p.m."]]},
+ {id:"r3",num:"3-3",tab:"ref",paper:"white",ref:"4 · 8.7.2 · 8.8.5 · 8.9 · 9.4",blocks:[
+  ['h',"PHONE NUMBERS"],
+  ['tbl',["Office","Number"],[
+   ["Volunteer Office","(850) 452-3605"],
+   ["Information Desk","(850) 452-2963"],
+   ["Base Pass & ID Office","(850) 452-3969"],
+   ["Naval Aviation Museum Foundation","(850) 453-2389"],
+   ["Foundation Education Director","(850) 308-8935"]]],
+  ['note',"There are no public telephones in the Museum. Information Desk phones are for official business only."]]},
+ {id:"r4",num:"3-4",tab:"ref",paper:"white",ref:"8.6 · 8.7.1",blocks:[
+  ['h',"UNIFORM"],
+  ['tbl',["Division","Wear"],[
+   ["Visitor Support, Information Desk, Docents","Men: collared dress shirt (tie optional for Visitor Support and Docents), Navy-blue blazer, gray or khaki slacks. Women: dress blouse, Navy-blue blazer, gray, khaki or Navy slacks or skirt. White slacks or skirt allowed in summer."],
+   ["Former aircrew","A flight jacket earned on active duty may replace the blazer."],
+   ["Home Front","The same, or early-1940s clothing with Division Head approval"],
+   ["Blue Angels Flight Line","Khaki slacks, capris or shorts; Blue Angels hat and polo; tennis shoes and socks"],
+   ["Blue Angels Autograph","Team polo, Navy-blue slacks, closed-toe shoes"],
+   ["Restoration, Modelers, FAD","Work clothes per safety rules; staff will specify"]]],
+  ['h5',"Everyone"],
+  ['ul',["Name badge on the right lapel or a lanyard; Museum patch on the left breast","No jeans, T-shirts, athletic wear, hoodies, flip-flops or torn clothing","No sandals, boat shoes or sneakers (except as listed above)","No hats unless your division allows them"]]]},
+ {id:"r5",num:"3-5",tab:"ref",paper:"white",ref:"6.9.2 · 9.1 – 9.19",blocks:[
+  ['h',"WHERE THINGS ARE"],
+  ['tbl',["Place","Where"],[
+   ["Volunteer entrance","West side, under the blue awning"],
+   ["Ready Room","Next to the Volunteer Office; Home Front is above it"],
+   ["Lost and Found","Operations office: main-deck stairs left of the Atrium, through the ship's hatch"],
+   ["Library","Lower deck; Museum offices are on the mezzanine above it"],
+   ["Foundation offices","Second deck by the Legacy Wall, above the library"],
+   ["Flight Adventure Deck","Second deck, above the Cubi Bar Café"],
+   ["Small Theater","Next to the Cubi Bar Café"],
+   ["Radford Room","West side, near Concessions and the Blue Angel cockpits"],
+   ["Hangar Bay One","Directly behind the main building"],
+   ["Restoration (Bldg 3221)","Behind Hangar Bay One, inside the fence"],
+   ["Theater and simulator tickets","Concessions counter"],
+   ["Evacuation muster point","Southwest corner of the main parking lot"]]]]},
+ {id:"r6",num:"3-6",tab:"ref",paper:"white",ref:"7.8 · 8.2 · 8.10",blocks:[
+  ['h',"HOURS REQUIRED AND AWARDS"],
+  ['tbl',["Requirement","Minimum"],[["Age","18"],["To stay active (most divisions)","96 hours a year, about 8 a month"],["Qualified Docent","2 tours a month"],["Restoration","2 watches a week"]]],
+  ['h5',"Recognition"],
+  ['tbl',["Hours","Award"],[
+   ["Starting out","Monthly newsletter, recognition socials, base ID if needed, name tag and timecard, patch and lapel pin, discounts at the theater, gift shop, simulators and concessions (for you, not guests)"],
+   ["500","Certificate and Museum service pin"],
+   ["1,000 – 9,000","Certificate each 1,000 hours; service pin with hours"],
+   ["10,000","Certificate on a wooden plaque, and a watch"]]]]},
+ {id:"r7",num:"3-7",tab:"ref",paper:"white",ref:"7.3 · 7.4 · 8.5 · 8.11 · 8.12",blocks:[
+  ['h',"WHO TO ASK AND CONDUCT"],
+  ['h5',"Chain of command"],
+  ['p',"Your [[Division Head]] → the [[Volunteer Coordinator]] → the Deputy Director (final authority). Start at the first step and work up."],
+  ['h5',"Always"],
+  ['ul',["Be courteous and accurate. If you don't know an answer, say so and help the guest find it.","Refer media questions to Museum or Foundation staff.","Report changes to your address, phone or email to the Volunteer Office."]],
+  ['h5',"Never"],
+  ['ul',["Accept tips or gifts; point the giver to a donation box","Share political views, off-color jokes or criticism of the Museum with guests","Chew gum or read non-official material in public areas","Discuss private collection or staff information outside work"]]]},
+ {id:"r8",num:"3-8",tab:"ref",paper:"white",ref:"2.1 · 2.2.1 · 2.3 · 3.1 · 3.2 · 3.3 · 3.4",blocks:[
+  ['h',"MUSEUM FACTS"],
+  ['tbl',["Topic","Answer"],[
+   ["Founded","14 December 1962, in an 8,500 sq ft wartime building"],
+   ["Who runs it","The U.S. Navy. It is the largest of 10 official Navy museums."],
+   ["Aircraft","About 179 on display here; 900+ more on loan or in storage"],
+   ["Artifacts","More than 36,000 uniforms, flight gear, medals and keepsakes"],
+   ["Famous aircraft","NC-4 (first flight across the Atlantic); a Battle of Midway SBD Dauntless; the last F-14 to fly a combat mission; the rare “Birdcage” Corsair"],
+   ["Visitors","Nearly 1 million in some years; most from outside Florida"],
+   ["Accredited","American Association of Museums, November 2018"]]]]},
+ {id:"r9",num:"3-9",tab:"ref",paper:"white",kind2:"glossary",blocks:[['h',"WORDS TO KNOW"]]}
+];
+
+const BACK = [
+ {id:"ept",num:"",paper:"yellow",kind:"backcover",emer:true},
+ {id:"e1",num:"E-1",paper:"yellow",emer:true,blocks:[
+  ['rev',"EMERGENCY PROCEDURES","INDEX"],
+  ['grp',"1  Medical"],['idx',[["Visitor Ill or Injured","e2"]]],
+  ['grp',"2  Fire"],['idx',[["Fire","e3"],["Building Evacuation","e4"],["Tornado","e5"]]],
+  ['grp',"3  Security"],['idx',[["Active Shooter","e6"],["Bomb Threat","e7"],["Weapon or Unattended Package","e8"],["Unruly Guest, Harassment, Theft","e9"]]],
+  ['grp',"4  Lost Child"],['idx',[["Lost Child","e10"]]],
+  ['grp',"Radio Codes"],['idx',[["Radio Code Words","e11"]]]]},
+ {id:"e2",num:"E-2",tab:"med",paper:"yellow",emer:true,ref:"6.5 · Att 9",blocks:[
+  ['rev',"MEDICAL","VISITOR ILL OR INJURED"],
+  S_("Staff","Call by radio",{c:1,r:"Report right away to the nearest staff member. Use [[BARNEY]] for a serious illness or injury."}),
+  S_("Person","Stay with, comfort",{c:1}),
+  ['cond',"If a defibrillator or CPR is needed:"],
+  S_("[[AED]]","Any volunteer may use"),
+  S_("CPR","Only if currently certified"),
+  ['cond',"When staff arrive:"],
+  S_("Onlookers","Direct away"),
+  S_("Family or group","Help find"),
+  ['warning',["Do not give medical advice or medicine. An adhesive bandage is fine.","Do not call 911 or the police yourself. Staff make that call."]]]},
+ {id:"e3",num:"E-3",tab:"fire",paper:"yellow",emer:true,ref:"6.8.1 · Att 9",blocks:[
+  ['rev',"FIRE","CODE RED"],
+  S_("Radio","“CODE RED” + location",{c:1,f:"Guide section 6.8.1 says to call CODE RED for a fire. The Visitor Support training sheet (Attachment 9) lists “suspicion of fire” as a BARNEY call. This checklist follows section 6.8.1. Ask your Division Head which to use for a fire you suspect but haven't seen."}),
+  S_("Fire alarm","Pull",{c:1}),
+  S_("Visitors","Move away from fire",{c:1}),
+  ['cond',"If evacuation is ordered:"],
+  S_("Building Evacuation","Perform E-4"),
+  ['note',"Before your first watch, learn where the exits, fire-alarm pull boxes, extinguishers and AEDs are."]]},
+ {id:"e4",num:"E-4",tab:"fire",paper:"yellow",emer:true,ref:"6.9.1 · 6.9.2",blocks:[
+  ['rev',"FIRE","BUILDING EVACUATION"],
+  S_("Visitors","To lower deck, out nearest exit",{c:1,r:"Help staff guide every visitor down to the [[lower deck]] and out the nearest exit."}),
+  S_("Yourself","Exit",{c:1}),
+  S_("[[Muster]]","SW corner, main parking lot",{c:1,r:"Straight across the parking lot from the blue awning at the volunteer entrance."}),
+  S_("ID, keys, purse","Take if time permits"),
+  ['note',"The order to evacuate comes by radio or the overhead speaker."]]},
+ {id:"e5",num:"E-5",tab:"fire",paper:"yellow",emer:true,ref:"Att 8 · Att 9",blocks:[
+  ['rev',"FIRE","TORNADO"],
+  ['cond',"When staff announce a possible tornado:"],
+  S_("Visitors","Into Giant Screen Theater",{c:1}),
+  S_("Overflow","Gift Shop")]},
+ {id:"e6",num:"E-6",tab:"sec",paper:"yellow",emer:true,ref:"6.8.1 · Att 9",blocks:[
+  ['rev',"SECURITY","ACTIVE SHOOTER"],
+  S_("Radio","“CHARLIE” + location",{c:1,t:"Use for an active shooter, or anyone with a weapon who is not a uniformed police officer."}),
+  S_("Shooter","Do not engage",{c:1}),
+  S_("Cover","Take, with visitors",{c:1,r:"Get to a safe place out of sight, taking as many visitors as you can without drawing the shooter's attention."}),
+  S_("Shelter in place","Until help arrives",{f:"Guide section 6.8.1 says to [[shelter in place]] with visitors until help arrives. The Visitor Support training sheet (Attachment 9) says “seek shelter or immediately get out of the building.” This checklist follows section 6.8.1. Ask your Division Head."}),
+  ['note',"Staff call law enforcement."]]},
+ {id:"e7",num:"E-7",tab:"sec",paper:"yellow",emer:true,ref:"6.8.1 · Att 9",blocks:[
+  ['rev',"SECURITY","BOMB THREAT"],
+  S_("Radio","“OPIE” + location",{c:1}),
+  S_("Staff","Wait for them",{c:1}),
+  ['cond',"If evacuation is ordered:"],
+  S_("Building Evacuation","Perform E-4")]},
+ {id:"e8",num:"E-8",tab:"sec",paper:"yellow",emer:true,ref:"6.1.5 · 6.8.1 · Att 9",blocks:[
+  ['rev',"SECURITY","WEAPON OR UNATTENDED PACKAGE"],
+  S_("Radio","“GRANGER” + location",{c:1}),
+  S_("Staff","Hand over on arrival"),
+  ['note',"Applies to any weapon not carried by uniformed police or federal agents on duty, weapons found in bag checks, and unattended packages."]]},
+ {id:"e9",num:"E-9",tab:"sec",paper:"yellow",emer:true,ref:"6.1.4 · 6.1.8 · 7.8.5 · Att 9",blocks:[
+  ['rev',"SECURITY","UNRULY GUEST, HARASSMENT, THEFT"],
+  S_("Minor misbehavior","Quiet word"),
+  S_("Someone about to get hurt","Act right away"),
+  S_("Belligerent guest or harassment","“BARNEY” + location"),
+  S_("Vandalism or theft","Call staff"),
+  ['caution',"Volunteers cannot detain or reprimand a guest or call Base Police. Do not touch guests."]]},
+ {id:"e10",num:"E-10",tab:"child",paper:"yellow",emer:true,ref:"6.8.1 · Att 8 · Att 9",blocks:[
+  ['rev',"LOST CHILD","CODE ADAM"],
+  S_("Radio","“ADAM” + location",{c:1}),
+  S_("Child's name or description","Never broadcast",{c:1}),
+  S_("Child or parent","Stay with them"),
+  S_("Staff","Wait for them"),
+  ['warning',"Never give a lost child's name or description over the radio or the PA system."]]},
+ {id:"e11",num:"E-11",tab:"codes",paper:"blue",emer:true,ref:"6.8.1 · Att 9",blocks:[
+  ['rev',"RADIO CODES","CODE WORDS"],
+  ['tbl',["Code","Means","Page"],[["BARNEY","Staff needed now, without saying why: serious illness or injury, harassment, a threat, crowd control","E-2"],["CODE RED","Fire","E-3"],["CHARLIE","Active shooter or armed person","E-6"],["OPIE","Bomb threat","E-7"],["GRANGER","Any other security problem: weapon, unattended package","E-8"],["ADAM","Lost child","E-10"]]],
+  S_("Yourself","Identify",{c:1}),
+  S_("Location","Exact",{c:1}),
+  S_("Nature of emergency","Do not say",{c:1}),
+  ['p',"Example: “This is Bill. I have a BARNEY at the Cubi Café entrance.”"]]}
+];
+
+const TABS = {
+ front:{side:[{k:"norm",n:"1",t:"Normal",loc:"Normal Procedures",first:"n1",paper:"white"},
+              {k:"div",n:"2",t:"Divisions",loc:"Divisions",first:"d1",paper:"white"},
+              {k:"ref",n:"3",t:"Ref",loc:"Reference Data",first:"r1",paper:"white"}],bot:[]},
+ back:{side:[{k:"med",n:"1",t:"Medical",loc:"Medical",first:"e2",paper:"yellow"},
+             {k:"fire",n:"2",t:"Fire",loc:"Fire",first:"e3",paper:"yellow"},
+             {k:"sec",n:"3",t:"Security",loc:"Security",first:"e6",paper:"yellow"},
+             {k:"child",n:"4",t:"Lost Child",loc:"Lost Child",first:"e10",paper:"yellow"}],
+       bot:[{k:"codes",n:"",t:"Radio Codes",loc:"Radio Codes",first:"e11",paper:"blue"}]}
+};
+const QUICK = [
+ ["Radio code words","The six code words and how to call one.","e11","E-11"],
+ ["Visitor Support watch","What to do on a roving watch.","n4","1-4"],
+ ["Museum closing","The 3:30 – 4:00 p.m. sequence.","n7","1-7"],
+ ["Can't make your watch","Who to call, including weekends.","n9","1-9"],
+ ["Library volunteering","What the Library division does and how to start.","d4","2-4"],
+ ["Words to know","Navy and Museum terms in plain English.","r9","3-9"]
+];
+
+/* ---------- State ---------- */
+const store={get(k,d){try{const v=localStorage.getItem("vpcl:"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+             set(k,v){try{localStorage.setItem("vpcl:"+k,JSON.stringify(v))}catch(e){}}};
+const ST={face:"front",idx:0,checks:store.get("checks",{}),zoom:store.get("zoom",innerWidth<560?1.25:1)};
+const book=document.getElementById("book"), stage=document.getElementById("stage");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const pages=f=>f==="front"?FRONT:BACK;
+const cur=()=>pages(ST.face)[ST.idx];
+function find(id){for(const f of ["front","back"]){const i=pages(f).findIndex(p=>p.id===id);if(i>=0)return {f,i}}return null}
+const pnum=p=>{const m=(p.num||"").match(/(\d+)(?!.*\d)/);return m?+m[1]:0};
+const attr=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;");
+
+/* [[Word]] or [[Word|shown text]] marks a dotted word from the list */
+function fmt(t){
+  return String(t).replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,(m,k,shown)=>G[k]?`<span data-g="${attr(k)}">${shown||k}</span>`:(shown||k));
+}
+
+/* ---------- Rendering ---------- */
+function stepHTML(p,b,i,n){
+  const [,item,resp,o]=b, key=p.id+":"+i, on=!!ST.checks[key];
+  const it=o.t?`<span data-tip="${attr(o.t)}">${fmt(item)}</span>`:fmt(item);
+  const rs=o.r||o.f?`<span data-tip="${attr(o.r||"")}"${o.f?` data-flag="${attr(o.f)}"`:""}>${fmt(resp)}</span>`:fmt(resp);
+  return `<button class="step" type="button" data-key="${key}" aria-pressed="${on}">${TICK}`+
+   `<span class="num">${o.c?"*":""}${n}.</span><span class="item">${it}</span><span class="lead" aria-hidden="true"></span><span class="resp">${rs}${o.f?'<span class="flag" aria-label="Guide sections differ">†</span>':""}</span></button>`;
+}
+function idxHTML(list){
+  return `<div class="idx">`+list.map(([l,id])=>{const t=find(id);const pg=t?pages(t.f)[t.i].num:"";
+    return `<a href="#" data-go="${id}"><span class="lbl2">${l}</span><span class="lead" aria-hidden="true"></span><span class="pg">${pg}</span></a>`}).join("")+`</div>`;
+}
+function wcnHTML(kind,txt){
+  const label={warning:"WARNING",caution:"CAUTION",note:"Note"}[kind];
+  const body=Array.isArray(txt)?`<ul>${txt.map(t=>`<li>${fmt(t)}</li>`).join("")}</ul>`:`<div>${fmt(txt)}</div>`;
+  return `<div class="wcn ${kind}" role="note"><span class="lbl">${label}</span>${body}</div>`;
+}
+function refHTML(ref){
+  return `<div class="refline">GUIDE REF: `+ref.split(" · ").map(tok=>{
+    const t=tok.trim(); let m;
+    if((m=t.match(/^Att (\d+)$/))&&ATT[m[1]]) return `<span data-ref="a:${m[1]}" tabindex="0">Att ${m[1]}</span>`;
+    if((m=t.match(/^(\d+(?:\.\d+)*)(?:\s*–\s*(\d+(?:\.\d+)*))?$/))){const ks=expand(m[1],m[2]);if(ks.length) return `<span data-ref="r:${ks.join(",")}" tabindex="0">§${t}</span>`;}
+    return t;
+  }).join(" · ")+`</div>`;
+}
+function expand(a,b){
+  const out=[];
+  if(!b){ if(REFS[a]) return [a]; const d=a.split(".").length; Object.keys(REFS).forEach(k=>{if(k.startsWith(a+".")&&k.split(".").length===d+1) out.push(k)}); return out.slice(0,6); }
+  const pa=a.split("."),pb=b.split("."); if(pa.length!==pb.length) return REFS[a]?[a]:[];
+  const pre=pa.slice(0,-1).join("."); for(let i=+pa.at(-1);i<=+pb.at(-1);i++){const k=(pre?pre+".":"")+i;if(REFS[k])out.push(k)} return out;
+}
+function glossaryBlocks(){
+  const keys=Object.keys(G).filter(k=>!["BARNEY","OPIE","ADAM","CODE RED","CHARLIE","GRANGER"].includes(k)).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:"base"}));
+  return [['h',"WORDS TO KNOW"],['tbl',["Word","Meaning"],keys.map(k=>[k[0].toUpperCase()+k.slice(1),G[k]])],['note',"Radio code words are on page E-11."]];
+}
+function blocksHTML(p){
+  let h="",run=[],n=0;
+  const blocks=p.kind2==="glossary"?glossaryBlocks():p.blocks;
+  const flush=()=>{if(run.length){h+=`<div class="steps">${run.join("")}</div>`;run=[]}};
+  blocks.forEach((b,i)=>{
+    if(b[0]==="s"){run.push(stepHTML(p,b,i,++n));return}
+    flush();
+    switch(b[0]){
+      case "h": n=0; h+=p.emer?`<h4>${b[1]}</h4>`:`<h3>${b[1]}</h3>`;break;
+      case "h4": h+=`<h4>${b[1]}</h4>`;break;
+      case "h5": n=0; h+=`<h5>${b[1]}</h5>`;break;
+      case "rev": n=0; h+=`<div class="rev"><span>${b[1]}</span>${b[2]?`<span>${b[2]}</span>`:""}</div>`;break;
+      case "p": h+=`<p>${fmt(b[1])}</p>`;break;
+      case "cond": h+=`<p class="cond">${fmt(b[1])}</p>`;break;
+      case "grp": h+=`<div class="idx-group">${b[1]}</div>`;break;
+      case "idx": h+=idxHTML(b[1]);break;
+      case "ul": h+=`<ul class="plain">${b[1].map(x=>`<li>${fmt(x)}</li>`).join("")}</ul>`;break;
+      case "warning": case "caution": case "note": h+=wcnHTML(b[0],b[1]);break;
+      case "tbl": h+=`<div class="tbl"><table><thead><tr>${b[1].map(x=>`<th scope="col">${x}</th>`).join("")}</tr></thead><tbody>`+
+        b[2].map(r=>`<tr>${r.map(c=>`<td>${fmt(c)}</td>`).join("")}</tr>`).join("")+`</tbody></table></div>`;break;
+    }
+  });
+  flush();
+  if(p.ref) h+=refHTML(p.ref);
+  return h;
+}
+function slotTop(i,n){const top=.55,bottom=.55,h=(8.5-top-bottom)/n;return {top:top+i*h,h:h-.06,mid:top+i*h+h/2}}
+function botSlot(i,n){const left=.5,w=Math.min(1.45,(4.5-left)/n);return {left:left+i*(w+.06),w,mid:left+i*(w+.06)+w/2}}
+const IN=v=>`calc(var(--in)*${v})`;
+function coverHTML(p){
+  const T=TABS[ST.face];
+  const locs=T.side.map((t,i)=>`<div class="loc" style="top:${IN(slotTop(i,T.side.length).mid-.32)}">${t.n}&nbsp; ${t.loc}<span class="bar"></span></div>`).join("")+
+    T.bot.map((t,i)=>`<div class="loc b" style="left:${IN(botSlot(i,T.bot.length).mid-(p.emer?.5:.36))}">${t.loc}<span class="bar"></span></div>`).join("");
+  if(p.kind==="cover") return `<div class="cover">
+    <div class="pub">${PUB}</div>
+    <div class="ttl"><div class="k">National Naval Aviation Museum<br>Volunteer Pocket Checklist</div><div class="ac">VPCL</div><div class="ac2">Normal Procedures<br>Divisions · Reference</div><div class="wings" aria-hidden="true"></div></div>
+    <div class="notices">
+      <div class="fict">Unofficial study aid. The NNAM Volunteer Guide and Museum staff direction govern.</div>
+      <div><b>SOURCE —</b> NNAM Volunteer Guide, revised 20 March 2025.</div>
+      <div><b>HOW TO USE —</b> Tap a step to check it off. Point at, or press and hold, any dotted word for a plain-English explanation. Flip the book, or tap EMER, for emergencies.</div>
+      <div class="date">${DATE}</div>
+    </div>${locs}</div>`;
+  return `<div class="cover">
+    <div class="pub">${PUB}</div>
+    <div class="ttl"><div class="ac" style="font-size:calc(var(--pt)*22)">EMERGENCY<br>PROCEDURES</div><div class="ac2">NNAM Volunteer Pocket Checklist</div></div>
+    <div class="notices"><div class="fict">Starred steps are memory items. Know them without the book.</div><div class="date">${DATE}</div></div>${locs}</div>`;
+}
+function sheetHTML(p){
+  const even=pnum(p)%2===0&&pnum(p)>0, emer=!!p.emer;
+  const cls=`sheet ${p.paper}${emer?" emer":""}${emer&&(even||p.kind==="backcover")?" even":""}`;
+  const inner=p.kind?coverHTML(p):
+    `<div class="body ${emer?"ep":"norm"}">${blocksHTML(p)}</div>
+     <div class="foot">${even?`<span>${p.num}</span><span>ORIGINAL</span><span>${PUB}</span>`:`<span>${PUB}</span><span>ORIGINAL</span><span>${p.num}</span>`}</div>`;
+  return `<div class="${cls}" data-page="${p.id}"><div class="holes" aria-hidden="true"></div>${inner}</div>`;
+}
+function tabsHTML(p){
+  const T=TABS[ST.face], all=[...T.side.map(t=>({...t,pos:"side"})),...T.bot.map(t=>({...t,pos:"bot"}))];
+  const co=p.tab?all.findIndex(t=>t.k===p.tab):-1;
+  return `<div class="tabs">`+all.map((t,i)=>{
+    if(co>=0&&i<co) return "";
+    const isCur=i===co, inner=`${t.n?`<span class="n">${t.n}</span>`:""}<span>${t.t}</span>`, label=t.pos==="side"?`<span class="v">${inner}</span>`:inner;
+    let style;
+    if(t.pos==="side"){const s=slotTop(T.side.findIndex(x=>x.k===t.k),T.side.length);style=`top:${IN(s.top)};height:${IN(s.h)}`}
+    else{const s=botSlot(T.bot.findIndex(x=>x.k===t.k),T.bot.length);style=`left:${IN(s.left)};width:${IN(s.w)}`}
+    return `<button type="button" class="tab ${t.pos} ${t.paper}${isCur?" cur":" behind"}" style="${style}" data-go="${t.first}" aria-label="Tab ${t.n} ${t.loc}">${label}</button>`;
+  }).join("")+`</div>`;
+}
+function render(){
+  hideTip(true);
+  const p=cur(); book.dataset.face=ST.face;
+  stage.innerHTML=sheetHTML(p)+tabsHTML(p);
+  const list=pages(ST.face);
+  const lab=p.num?(/^[A-B]$/.test(p.num)?"Page "+p.num:p.num):(p.kind==="cover"?"Title page":"Emergency title");
+  document.getElementById("pglabel").innerHTML=`${lab}<small>${ST.face==="front"?"Normal side":"Emergency side"} · ${ST.idx+1} of ${list.length}</small>`;
+  document.getElementById("prev").disabled=ST.idx===0;
+  document.getElementById("next").disabled=ST.idx===list.length-1;
+  updateCounter();
+}
+function updateCounter(){
+  const btns=stage.querySelectorAll(".step"), done=[...btns].filter(b=>b.getAttribute("aria-pressed")==="true").length;
+  document.getElementById("counter").textContent=btns.length?`${done} of ${btns.length} checked`:"No check items on this page";
+  document.getElementById("reset").disabled=done===0;
+}
+
+/* ---------- Motion ---------- */
+function animateTurn(dir,apply){
+  if(reduce){apply();return}
+  const old=stage.querySelector(".sheet");
+  if(dir>0&&old){const ghost=old.cloneNode(true);ghost.classList.add("flip-ghost");apply();stage.appendChild(ghost);
+    ghost.animate([{transform:"rotateX(0deg)",opacity:1},{transform:"rotateX(88deg)",opacity:.2}],{duration:320,easing:"cubic-bezier(.45,0,.7,.4)"}).onfinish=()=>ghost.remove();}
+  else{apply();const s=stage.querySelector(".sheet");s&&s.animate([{transform:"rotateX(88deg)",opacity:.2},{transform:"rotateX(0deg)",opacity:1}],{duration:320,easing:"cubic-bezier(.2,.6,.4,1)"});}
+}
+function animateFlip(apply){
+  if(reduce){apply();return}
+  const a=book.animate([{transform:"rotateX(0)"},{transform:"rotateX(90deg)"}],{duration:170,easing:"ease-in"});
+  a.onfinish=()=>{apply();book.animate([{transform:"rotateX(-90deg)"},{transform:"rotateX(0)"}],{duration:200,easing:"ease-out"})};
+}
+function goTo(face,idx){
+  if(face===ST.face&&idx===ST.idx) return;
+  const apply=()=>{ST.face=face;ST.idx=idx;render()};
+  if(face!==ST.face) animateFlip(apply); else animateTurn(idx>ST.idx?1:-1,apply);
+}
+function goId(id){const t=find(id);if(t)goTo(t.f,t.i)}
+
+/* ---------- Explanations: hover with a mouse, press and hold (or tap) on touch ---------- */
+const tip=document.createElement("div"); tip.id="tip"; tip.setAttribute("role","tooltip"); document.body.appendChild(tip);
+let tipEl=null, pinned=false, holdTimer=null, held=false;
+const TIPSEL="[data-tip],[data-g],[data-ref]";
+function tipContent(el){
+  if(el.dataset.g){const k=el.dataset.g;return `<b class="h">${k}</b><p>${G[k]}</p>`}
+  if(el.dataset.ref){const [t,v]=el.dataset.ref.split(":");
+    if(t==="a") return `<b class="h">Guide · Attachment ${v}</b><p><b>${ATT[v][0]}.</b> ${ATT[v][1]}</p>`;
+    return v.split(",").map(k=>{let txt=REFS[k].t;if(txt.length>900)txt=txt.slice(0,900).replace(/\s\S*$/,"")+" …";
+      return `<b class="h">Guide §${k} · ${REFS[k].h}</b>`+txt.split("\n").map(x=>`<p>${x}</p>`).join("")}).join("")+`<span class="src">VOLUNTEER GUIDE, REV. 20 MAR 2025 · TEXT RECOVERED FROM SCAN</span>`;}
+  let h=el.dataset.tip?(/<(p|ul)>/.test(el.dataset.tip)?el.dataset.tip:`<p>${el.dataset.tip}</p>`):"";
+  h=fmtPlain(h);
+  if(el.dataset.flag) h+=`<div class="${h?"flagnote":""}"><b class="h">† Guide sections differ</b><p>${fmtPlain(el.dataset.flag)}</p></div>`;
+  return h;
+}
+const fmtPlain=t=>String(t).replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,(m,k,s)=>s||k);
+function placeTip(el){
+  const r=el.getBoundingClientRect(), m=12, vw=innerWidth, vh=innerHeight;
+  const w=tip.offsetWidth, h=tip.offsetHeight;
+  let x=Math.min(Math.max(m,r.left+r.width/2-w/2),vw-w-m);
+  let y=r.bottom+8; if(y+h>vh-m&&r.top-8-h>m) y=r.top-8-h; if(y+h>vh-m) y=Math.max(m,vh-m-h);
+  tip.style.left=x+"px"; tip.style.top=y+"px";
+}
+function showTip(el,pin){
+  const c=tipContent(el); if(!c) return;
+  tipEl=el; pinned=!!pin;
+  tip.innerHTML=(pin?`<button class="x" type="button" aria-label="Close">✕</button>`:"")+c;
+  tip.classList.toggle("pin",pinned); tip.classList.add("on"); tip.scrollTop=0; placeTip(el);
+}
+function hideTip(force){ if(pinned&&!force) return; tip.classList.remove("on","pin"); tipEl=null; pinned=false; }
+document.addEventListener("pointerover",e=>{
+  if(e.pointerType!=="mouse"||pinned) return;
+  const el=e.target.closest(TIPSEL); if(el&&el!==tipEl) showTip(el,false);
+});
+document.addEventListener("pointerout",e=>{
+  if(e.pointerType!=="mouse"||pinned) return;
+  const el=e.target.closest(TIPSEL); if(!el) return;
+  if(e.relatedTarget&&el.contains(e.relatedTarget)) return; hideTip();
+});
+document.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="mouse") return;
+  const el=e.target.closest(TIPSEL); held=false; clearTimeout(holdTimer);
+  if(el&&el.closest(".step")) holdTimer=setTimeout(()=>{held=true;showTip(el,true)},420);
+},{passive:true});
+["pointerup","pointercancel","pointermove"].forEach(ev=>document.addEventListener(ev,e=>{if(ev!=="pointermove"||Math.abs(e.movementX)+Math.abs(e.movementY)>6)clearTimeout(holdTimer)},{passive:true}));
+document.addEventListener("contextmenu",e=>{if(e.target.closest(".step"))e.preventDefault()});
+document.addEventListener("click",e=>{
+  if(held){held=false;e.preventDefault();e.stopPropagation();return}
+  if(e.target.closest("#tip .x")){hideTip(true);return}
+  if(e.target.closest("#tip")) return;
+  const el=e.target.closest(TIPSEL);
+  if(el&&!el.closest(".step")){e.preventDefault();e.stopPropagation(); if(pinned&&tipEl===el) hideTip(true); else showTip(el,true); return}
+  if(pinned){hideTip(true); if(!e.target.closest(".step,.tab,[data-go],.btn")){return}}
+},true);
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){hideTip(true);return}
+  const el=e.target.closest&&e.target.closest("[data-ref]"); if(el&&(e.key==="Enter"||e.key===" ")){e.preventDefault();showTip(el,true)}
+});
+document.addEventListener("focusin",e=>{const el=e.target.closest&&e.target.closest("[data-ref]");if(el&&!pinned)showTip(el,false)});
+document.addEventListener("focusout",e=>{if(!pinned)hideTip()});
+addEventListener("scroll",()=>hideTip(true),{passive:true});
+stage.addEventListener("scroll",()=>hideTip(true),{capture:true,passive:true});
+addEventListener("resize",()=>hideTip(true));
+
+/* ---------- Events ---------- */
+stage.addEventListener("click",e=>{
+  const st=e.target.closest(".step");
+  if(st){const k=st.dataset.key,on=st.getAttribute("aria-pressed")!=="true";
+    st.setAttribute("aria-pressed",on); if(on)ST.checks[k]=1; else delete ST.checks[k]; store.set("checks",ST.checks); updateCounter(); return}
+  const g=e.target.closest("[data-go]"); if(g){e.preventDefault();goId(g.dataset.go)}
+});
+document.getElementById("prev").onclick=()=>ST.idx>0&&goTo(ST.face,ST.idx-1);
+document.getElementById("next").onclick=()=>ST.idx<pages(ST.face).length-1&&goTo(ST.face,ST.idx+1);
+document.getElementById("emer").onclick=()=>goId("e1");
+document.getElementById("flip").onclick=()=>goTo(ST.face==="front"?"back":"front",0);
+document.getElementById("reset").onclick=()=>{const id=cur().id;Object.keys(ST.checks).forEach(k=>{if(k.startsWith(id+":"))delete ST.checks[k]});store.set("checks",ST.checks);render()};
+const zoomBtn=document.getElementById("zoom"), ZOOMS=[1,1.25,1.5];
+function setZoom(z){ST.zoom=z;store.set("zoom",z);book.style.setProperty("--zoom",z);zoomBtn.textContent=`Type ${Math.round(z*100)}%`}
+zoomBtn.onclick=()=>setZoom(ZOOMS[(ZOOMS.indexOf(ST.zoom)+1)%ZOOMS.length]);
+document.addEventListener("keydown",e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey||/input|textarea/i.test(e.target.tagName))return;
+  if(e.key==="ArrowRight")document.getElementById("next").click();
+  else if(e.key==="ArrowLeft")document.getElementById("prev").click();
+  else if(e.key==="e"||e.key==="E")goId("e1");
+  else if(e.key==="f"||e.key==="F")document.getElementById("flip").click();
+});
+const kb=(id,fn)=>document.getElementById(id).onclick=()=>{fn();book.scrollIntoView({behavior:reduce?"auto":"smooth",block:"nearest"})};
+kb("kprev",()=>document.getElementById("prev").click());
+kb("knext",()=>document.getElementById("next").click());
+kb("kemer",()=>goId("e1"));
+kb("kflip",()=>document.getElementById("flip").click());
+const ql=document.getElementById("quick");
+ql.innerHTML=QUICK.map(([t,d,id,lbl])=>`<li><span class="txt"><b>${t}</b>${d}</span><button class="go" type="button" data-go="${id}">Go to ${lbl}</button></li>`).join("");
+ql.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g){goId(g.dataset.go);book.scrollIntoView({behavior:reduce?"auto":"smooth",block:"nearest"})}});
+
+if(!ZOOMS.includes(ST.zoom)) ST.zoom=1;
+const HASH={normal:"n1",divisions:"d1",library:"d4",reference:"r1",emergency:"e1",codes:"e11",title:"title",words:"r9"};
+function fromHash(){const h=(location.hash||"").slice(1).toLowerCase();const id=HASH[h]||(find(h)?h:null);if(id){const t=find(id);ST.face=t.f;ST.idx=t.i}}
+fromHash();
+addEventListener("hashchange",()=>{const h=(location.hash||"").slice(1).toLowerCase();const id=HASH[h]||(find(h)?h:null);if(id)goId(id)});
+setZoom(ST.zoom); render();
+})();
+</script>
+
+</body></html>
