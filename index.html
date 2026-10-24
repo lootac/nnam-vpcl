@@ -204,6 +204,11 @@ aside .lede{font-size:14.5px;line-height:1.55;margin:0 0 16px;max-width:60ch}
 .kbtn:hover{border-color:var(--muted)}
 .kbtn:active{transform:translateY(1px);border-bottom-width:1px}
 .disclaim{margin-top:18px;font-size:12px;line-height:1.5;color:var(--muted);max-width:60ch}
+.gest{margin-top:14px;font-size:13px;line-height:1.55;color:var(--muted);max-width:60ch}
+.gest b{color:var(--fg)}
+#toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);z-index:70;background:var(--fg);color:var(--bg);
+  font:700 12.5px/1.3 var(--sans);letter-spacing:.03em;padding:9px 14px;border-radius:999px;box-shadow:0 8px 22px -8px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;max-width:calc(100vw - 32px);text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
 .flip-ghost{position:absolute;inset:0;z-index:20;pointer-events:none}
 
 /* Hover / press-and-hold explanations */
@@ -243,6 +248,8 @@ aside .lede{font-size:14.5px;line-height:1.55;margin:0 0 16px;max-width:60ch}
       <button class="btn emerg" id="emer" title="Emergency procedures index (E)"><span>EMER</span></button>
     </div>
     <div class="bar">
+      <button class="btn" id="hback" aria-label="Back to the page you viewed before" disabled>↶ Back</button>
+      <button class="btn" id="hfwd" aria-label="Forward to the next page you viewed" disabled>Fwd ↷</button>
       <button class="btn" id="flip">Flip PCL</button>
       <button class="btn" id="zoom">Type 100%</button>
       <button class="btn" id="reset" disabled>Clear checks</button>
@@ -254,6 +261,7 @@ aside .lede{font-size:14.5px;line-height:1.55;margin:0 0 16px;max-width:60ch}
     <h2>Using this checklist</h2>
     <p class="lede">A pocket checklist in the Navy style. The white side covers your watch, each volunteer division, and reference facts. Flip the book over, or tap EMER, for the yellow emergency side. Tap a step to check it off. <b>Dotted words explain themselves</b>: point at them, or press and hold on a phone.</p>
     <ul class="quick" id="quick"></ul>
+    <div class="gest"><b>Touch screen:</b> swipe <b>up</b> on the page for the next page, <b>down</b> for the previous page. Swipe <b>left</b> to go back to the page you viewed before, <b>right</b> to go forward again, like a web browser. With a mouse, use ↶ Back and Fwd ↷.</div>
     <div class="keys"><button type="button" class="kbtn" id="kprev" aria-label="Previous page">←</button> <button type="button" class="kbtn" id="knext" aria-label="Next page">→</button> turn pages · <button type="button" class="kbtn" id="kemer" aria-label="Emergency index">E</button> emergency index · <button type="button" class="kbtn" id="kflip" aria-label="Flip the book">F</button> flip the book<br>Tap a key here, or press it on your keyboard.</div>
     <p class="disclaim">Unofficial study aid prepared by a volunteer. The NNAM Volunteer Guide and Museum staff direction govern wherever they differ from this checklist. Where the Guide's own sections disagree, the step is marked † and the explanation says so.</p>
   </aside>
@@ -718,6 +726,7 @@ const store={get(k,d){try{const v=localStorage.getItem("vpcl:"+k);return v==null
 const ST={face:"front",idx:0,checks:store.get("checks",{}),zoom:store.get("zoom",innerWidth<560?1.25:1)};
 const book=document.getElementById("book"), stage=document.getElementById("stage");
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let HIST=[],HP=-1,NAVH=false;
 const pages=f=>f==="front"?FRONT:BACK;
 const cur=()=>pages(ST.face)[ST.idx];
 function find(id){for(const f of ["front","back"]){const i=pages(f).findIndex(p=>p.id===id);if(i>=0)return {f,i}}return null}
@@ -834,6 +843,10 @@ function tabsHTML(p){
 }
 function render(){
   hideTip(true);
+  if(!NAVH){const h=HIST[HP]; if(!h||h.f!==ST.face||h.i!==ST.idx){HIST=HIST.slice(0,HP+1);HIST.push({f:ST.face,i:ST.idx});if(HIST.length>100)HIST.shift();HP=HIST.length-1;}}
+  NAVH=false;
+  document.getElementById("hback").disabled=HP<=0;
+  document.getElementById("hfwd").disabled=HP>=HIST.length-1;
   const p=cur(); book.dataset.face=ST.face;
   stage.innerHTML=sheetHTML(p)+tabsHTML(p);
   const list=pages(ST.face);
@@ -960,6 +973,82 @@ kb("kprev",()=>document.getElementById("prev").click());
 kb("knext",()=>document.getElementById("next").click());
 kb("kemer",()=>goId("e1"));
 kb("kflip",()=>document.getElementById("flip").click());
+/* ---------- Browsing history (back / forward) ---------- */
+const toastEl=document.createElement("div"); toastEl.id="toast"; toastEl.setAttribute("role","status"); document.body.appendChild(toastEl);
+let toastT=null;
+function toast(t){toastEl.textContent=t;toastEl.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove("on"),1400)}
+const pageName=(f,i)=>{const p=pages(f)[i];const b=(p.blocks||[]).find(x=>x[0]==="h"||x[0]==="rev");
+  const t=p.kind==="cover"?"Title page":p.kind==="backcover"?"Emergency title":p.kind2==="glossary"?"Words to Know":b?(b[0]==="rev"?(b[2]||b[1]):b[1]):"";
+  return (p.num?p.num+" ":"")+String(t).replace(/<[^>]+>/g,"").toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());};
+function histGo(d){
+  const n=HP+d;
+  if(n<0||n>=HIST.length){toast(d<0?"No earlier page in your history":"No later page in your history");return}
+  HP=n; NAVH=true; const h=HIST[n];
+  toast((d<0?"↶ Back to ":"Forward to ")+pageName(h.f,h.i));
+  if(h.f===ST.face&&h.i===ST.idx){NAVH=false;render();return}
+  goTo(h.f,h.i);
+}
+document.getElementById("hback").onclick=()=>histGo(-1);
+document.getElementById("hfwd").onclick=()=>histGo(1);
+
+/* ---------- Swipe gestures on the page ----------
+   up = next page (lift it over the top), down = previous page,
+   left = back in history, right = forward in history.
+   A long page scrolls first; the swipe turns the page only once it is scrolled to its end. */
+let sw=null, swallowClick=false;
+function canScroll(el,dir){ // dir>0: content moves up (finger up)
+  for(let n=el;n&&n!==stage;n=n.parentElement){
+    if(n.scrollHeight>n.clientHeight+1&&/(auto|scroll)/.test(getComputedStyle(n).overflowY)){
+      if(dir>0&&n.scrollTop+n.clientHeight<n.scrollHeight-1) return true;
+      if(dir<0&&n.scrollTop>0) return true;
+    }}
+  return false;
+}
+function canScrollX(el,dx){
+  for(let n=el;n&&n!==stage;n=n.parentElement){
+    if(n.scrollWidth>n.clientWidth+1&&/(auto|scroll)/.test(getComputedStyle(n).overflowX)){
+      if(dx<0&&n.scrollLeft+n.clientWidth<n.scrollWidth-1) return true;
+      if(dx>0&&n.scrollLeft>0) return true;
+    }}
+  return false;
+}
+stage.addEventListener("touchstart",e=>{
+  if(e.touches.length!==1){sw=null;return}
+  const t=e.touches[0]; sw={x:t.clientX,y:t.clientY,t:Date.now(),mode:null,target:e.target};
+},{passive:true});
+stage.addEventListener("touchmove",e=>{
+  if(!sw) return;
+  const t=e.touches[0], dx=t.clientX-sw.x, dy=t.clientY-sw.y;
+  if(!sw.mode){
+    if(Math.abs(dx)<10&&Math.abs(dy)<10) return;
+    if(Math.abs(dx)>Math.abs(dy)*1.3) sw.mode=canScrollX(sw.target,dx)?"native":"h";
+    else if(Math.abs(dy)>Math.abs(dx)*1.3){
+      const r=stage.getBoundingClientRect(), fits=r.top>=-2&&r.bottom<=innerHeight+2;
+      sw.mode=(!fits||canScroll(sw.target,dy<0?1:-1))?"native":"v";
+    } else sw.mode="native";
+  }
+  if(sw.mode==="h"||sw.mode==="v"){ e.preventDefault();
+    const s=stage.querySelector(".sheet");
+    if(s&&!reduce) s.style.transform=sw.mode==="v"?`translateY(${Math.max(-40,Math.min(40,dy*.25))}px)`:`translateX(${Math.max(-30,Math.min(30,dx*.2))}px)`;
+  }
+},{passive:false});
+function endSwipe(e){
+  if(!sw) return; const s=stage.querySelector(".sheet"); if(s) s.style.transform="";
+  const t=e.changedTouches&&e.changedTouches[0]; const m=sw.mode; const st=sw; sw=null;
+  if(!t||(m!=="h"&&m!=="v")) return;
+  const dx=t.clientX-st.x, dy=t.clientY-st.y, fast=Date.now()-st.t<700, far=m==="h"?Math.abs(dx)>60:Math.abs(dy)>60;
+  swallowClick=true; setTimeout(()=>swallowClick=false,350);
+  if(!(far||(fast&&Math.max(Math.abs(dx),Math.abs(dy))>35))) return;
+  hideTip(true);
+  if(m==="v"){
+    if(dy<0){ if(ST.idx<pages(ST.face).length-1) goTo(ST.face,ST.idx+1); else toast("Last page on this side. Tap Flip PCL for the other side."); }
+    else { if(ST.idx>0) goTo(ST.face,ST.idx-1); else toast("First page on this side"); }
+  } else histGo(dx<0?-1:1);
+}
+stage.addEventListener("touchend",endSwipe);
+stage.addEventListener("touchcancel",()=>{const s=stage.querySelector(".sheet");if(s)s.style.transform="";sw=null});
+document.addEventListener("click",e=>{if(swallowClick&&e.target.closest("#stage")){e.preventDefault();e.stopPropagation();swallowClick=false}},true);
+
 const ql=document.getElementById("quick");
 ql.innerHTML=QUICK.map(([t,d,id,lbl])=>`<li><span class="txt"><b>${t}</b>${d}</span><button class="go" type="button" data-go="${id}">Go to ${lbl}</button></li>`).join("");
 ql.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g){goId(g.dataset.go);book.scrollIntoView({behavior:reduce?"auto":"smooth",block:"nearest"})}});
