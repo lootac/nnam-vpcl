@@ -1,5 +1,5 @@
 /* NNAM VPCL offline support. Pages: network first (fresh when online), saved copy when offline. */
-const VERSION = "vpcl-2026-10-25b";
+const VERSION = "vpcl-2026-10-25c";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
