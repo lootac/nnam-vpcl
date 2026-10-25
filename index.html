@@ -216,6 +216,15 @@ aside .lede{font-size:14.5px;line-height:1.55;margin:0 0 16px;max-width:60ch}
 #toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);z-index:70;background:var(--fg);color:var(--bg);
   font:700 12.5px/1.3 var(--sans);letter-spacing:.03em;padding:9px 14px;border-radius:999px;box-shadow:0 8px 22px -8px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;max-width:calc(100vw - 32px);text-align:center}
 #toast.on{opacity:1;transform:translate(-50%,0)}
+.plink{display:inline-block;border:calc(var(--pt)*1.1) solid currentColor;border-radius:3px;padding:0 .3em;margin:0 .05em;font-family:var(--sans);font-weight:700;font-size:.92em;line-height:1.3;white-space:nowrap;cursor:pointer;text-transform:none;letter-spacing:0}
+.plink:hover,.plink:focus-visible{background:var(--ink);color:var(--paper)}
+tr.rowlink{cursor:pointer}
+tr.rowlink:hover td,tr.rowlink:active td{background:rgba(27,58,115,.13)}
+table.codes td:first-child{white-space:nowrap}
+.backjump{display:flex;align-items:center;gap:.4em;width:100%;min-height:calc(var(--in)*.42);margin:0 0 .8em;padding:.45em .7em;background:var(--navy);color:#fff;border:0;border-radius:6px;
+  font:700 calc(var(--pt)*11)/1.2 var(--sans);text-align:left;cursor:pointer;box-shadow:0 3px 8px -4px rgba(0,0,0,.5)}
+.backjump:active{transform:translateY(1px)}
+.codecard{margin-top:1em}
 .flip-ghost{position:absolute;inset:0;z-index:20;pointer-events:none}
 
 /* Hover / press-and-hold explanations */
@@ -364,6 +373,7 @@ const FRONT = [
   ['warning',"Something that could hurt you or someone else if not followed."],
   ['caution',"Something that could cause damage, embarrassment or trouble for you or the Museum."],
   ['note',"Helpful extra information."],
+  ['p',"A boxed page number, like E-11, is a link. Tap it to go straight to that page; a Back button then brings you back. <b>Dotted explains, boxed goes.</b>"],
   ['p',"Dotted words have a plain-English explanation. Point at them with a mouse, or press and hold on a phone. Guide references at the bottom of each page open the Guide's own wording."],
   ['p',"A dagger (†) means two parts of the Volunteer Guide disagree. The explanation tells you how."],
   ['p',"Times are Museum local time (Central)."]]},
@@ -703,7 +713,7 @@ const BACK = [
   ['warning',"Never give a lost child's name or description over the radio or the PA system."]]},
  {id:"e11",num:"E-11",tab:"codes",paper:"blue",emer:true,ref:"6.8.1 · Att 9",blocks:[
   ['rev',"RADIO CODES","CODE WORDS"],
-  ['tbl',["Code","Means","Page"],[["BARNEY","Staff needed now, without saying why: serious illness or injury, harassment, a threat, crowd control","E-2"],["CODE RED","Fire","E-3"],["CHARLIE","Active shooter or armed person","E-6"],["OPIE","Bomb threat","E-7"],["GRANGER","Any other security problem: weapon, unattended package","E-8"],["ADAM","Lost child","E-10"]]],
+  ['tbl',["Code","Means","Page"],[["BARNEY","Staff needed now, without saying why: serious illness or injury, harassment, a threat, crowd control","E-2"],["CODE RED","Fire","E-3"],["CHARLIE","Active shooter or armed person","E-6"],["OPIE","Bomb threat","E-7"],["GRANGER","Any other security problem: weapon, unattended package","E-8"],["ADAM","Lost child","E-10"]],{rowlink:1,cls:"codes"}],
   S_("Yourself","Identify",{c:1}),
   S_("Location","Exact",{c:1}),
   S_("Nature of emergency","Do not say",{c:1}),
@@ -735,7 +745,7 @@ const store={get(k,d){try{const v=localStorage.getItem("vpcl:"+k);return v==null
 const ST={face:"front",idx:0,checks:store.get("checks",{}),zoom:store.get("zoom",innerWidth<560?1.25:1)};
 const book=document.getElementById("book"), stage=document.getElementById("stage");
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-let HIST=[],HP=-1,NAVH=false;
+let HIST=[],HP=-1,NAVH=false,JUMP=null,BK="";
 const pages=f=>f==="front"?FRONT:BACK;
 const cur=()=>pages(ST.face)[ST.idx];
 function find(id){for(const f of ["front","back"]){const i=pages(f).findIndex(p=>p.id===id);if(i>=0)return {f,i}}return null}
@@ -743,8 +753,16 @@ const pnum=p=>{const m=(p.num||"").match(/(\d+)(?!.*\d)/);return m?+m[1]:0};
 const attr=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;");
 
 /* [[Word]] or [[Word|shown text]] marks a dotted word from the list */
+let PMAP=null;
+function pageMap(){if(!PMAP){PMAP={};[...FRONT,...BACK].forEach(p=>{if(p.num&&p.num.includes("-"))PMAP[p.num]=p.id})}return PMAP}
+/* Any page number in the text (E-4, 3-4) becomes a boxed link: dotted explains, boxed goes. */
+function linkPages(h){
+  return String(h).split(/(<[^>]+>)/).map(part=>part.startsWith("<")?part:
+    part.replace(/(^|[^\w-])((?:E|[1-3])-\d{1,2})(?![\w-])/g,(m,pre,num)=>{const id=pageMap()[num];
+      return id?`${pre}<span class="plink" role="link" tabindex="0" data-go="${id}" data-jump="1" aria-label="Go to page ${num}">${num}&nbsp;▸</span>`:m})).join("");
+}
 function fmt(t){
-  return String(t).replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,(m,k,shown)=>G[k]?`<span data-g="${attr(k)}">${shown||k}</span>`:(shown||k));
+  return linkPages(String(t).replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g,(m,k,shown)=>G[k]?`<span data-g="${attr(k)}">${shown||k}</span>`:(shown||k)));
 }
 
 /* ---------- Rendering ---------- */
@@ -800,11 +818,13 @@ function blocksHTML(p){
       case "idx": h+=idxHTML(b[1]);break;
       case "ul": h+=`<ul class="plain">${b[1].map(x=>`<li>${fmt(x)}</li>`).join("")}</ul>`;break;
       case "warning": case "caution": case "note": h+=wcnHTML(b[0],b[1]);break;
-      case "tbl": h+=`<div class="tbl"><table><thead><tr>${b[1].map(x=>`<th scope="col">${x}</th>`).join("")}</tr></thead><tbody>`+
-        b[2].map(r=>`<tr>${r.map(c=>`<td>${fmt(c)}</td>`).join("")}</tr>`).join("")+`</tbody></table></div>`;break;
+      case "tbl": h+=`<div class="tbl"><table${b[3]&&b[3].cls?` class="${b[3].cls}"`:""}><thead><tr>${b[1].map(x=>`<th scope="col">${x}</th>`).join("")}</tr></thead><tbody>`+
+        b[2].map(r=>{const rl=b[3]&&b[3].rowlink?pageMap()[String(r[r.length-1]).trim()]:null;
+          return `<tr${rl?` class="rowlink" data-go="${rl}" data-jump="1"`:""}>${r.map(c=>`<td>${fmt(c)}</td>`).join("")}</tr>`}).join("")+`</tbody></table></div>`;break;
     }
   });
   flush();
+  if(p.emer&&p.id!=="e11"&&p.id!=="e1") h+=`<p class="codecard">${fmt("Radio code card: E-11")}</p>`;
   if(p.ref) h+=refHTML(p.ref);
   return h;
 }
@@ -834,7 +854,7 @@ function sheetHTML(p){
   const even=pnum(p)%2===0&&pnum(p)>0, emer=!!p.emer;
   const cls=`sheet ${p.paper}${emer?" emer":""}${emer&&(even||p.kind==="backcover")?" even":""}`;
   const inner=p.kind?coverHTML(p):
-    `<div class="body ${emer?"ep":"norm"}">${blocksHTML(p)}</div>
+    `<div class="body ${emer?"ep":"norm"}">${BK}${blocksHTML(p)}</div>
      <div class="foot">${even?`<span>${p.num}</span><span>ORIGINAL</span><span>${PUB}</span>`:`<span>${PUB}</span><span>ORIGINAL</span><span>${p.num}</span>`}</div>`;
   return `<div class="${cls}" data-page="${p.id}"><div class="holes" aria-hidden="true"></div>${inner}</div>`;
 }
@@ -857,6 +877,8 @@ function render(){
   document.getElementById("hback").disabled=HP<=0;
   document.getElementById("hfwd").disabled=HP>=HIST.length-1;
   const p=cur(); book.dataset.face=ST.face;
+  BK="";
+  if(JUMP){const t=find(JUMP.to); if(t&&t.f===ST.face&&t.i===ST.idx) BK=`<button type="button" class="backjump" data-back="1">↶ Back to ${pageName(JUMP.f,JUMP.i)}</button>`; else JUMP=null;}
   stage.innerHTML=sheetHTML(p)+tabsHTML(p);
   const list=pages(ST.face);
   const lab=p.num?(/^[A-B]$/.test(p.num)?"Page "+p.num:p.num):(p.kind==="cover"?"Title page":"Emergency title");
@@ -956,7 +978,12 @@ stage.addEventListener("scroll",()=>hideTip(true),{capture:true,passive:true});
 addEventListener("resize",()=>hideTip(true));
 
 /* ---------- Events ---------- */
+function jump(id){const t=find(id); if(!t||(t.f===ST.face&&t.i===ST.idx)) return; JUMP={f:ST.face,i:ST.idx,to:id}; goTo(t.f,t.i)}
+stage.addEventListener("keydown",e=>{const j=e.target.closest&&e.target.closest("[data-jump]"); if(j&&(e.key==="Enter"||e.key===" ")){e.preventDefault();e.stopPropagation();jump(j.dataset.go)}});
 stage.addEventListener("click",e=>{
+  const bk=e.target.closest("[data-back]"); if(bk&&JUMP){const j=JUMP;JUMP=null;goTo(j.f,j.i);return}
+  const jl=e.target.closest("[data-jump]"); if(jl){e.preventDefault();jump(jl.dataset.go);return}
+  const ix=e.target.closest(".body [data-go]"); if(ix){e.preventDefault();jump(ix.dataset.go);return}
   const st=e.target.closest(".step");
   if(st){const k=st.dataset.key,on=st.getAttribute("aria-pressed")!=="true";
     st.setAttribute("aria-pressed",on); if(on)ST.checks[k]=1; else delete ST.checks[k]; store.set("checks",ST.checks); updateCounter(); return}
