@@ -258,6 +258,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .mb[aria-pressed="true"],.mb[aria-expanded="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .mbemer{flex-grow:1.25;background:repeating-linear-gradient(45deg,#111 0 7px,#f6e36e 7px 14px);border:2px solid #111;padding:5px}
 .mbemer .em{background:#f6e36e;color:#111;border-radius:6px;padding:9px 4px;font-size:13px;letter-spacing:.08em;width:100%;text-align:center}
+.mbemer.isnorm,.cwrap .mbemer.isnorm{background:repeating-linear-gradient(45deg,#1b3a73 0 7px,#fbfbf6 7px 14px);border:2px solid #1b3a73}
+.mbemer.isnorm .em{background:#fbfbf6;color:#1b3a73;letter-spacing:0;font-size:12px;padding-inline:2px}
 .mmenu:not([hidden]){display:block;position:absolute;z-index:44;left:0;right:0;bottom:calc(100% + 8px);
   background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 14px 34px -12px rgba(0,0,0,.55)}
 .mpage{font:700 14px/1.3 var(--sans);text-align:center;margin-bottom:10px}
@@ -971,6 +973,7 @@ function render(){
   NAVH=false;
   document.getElementById("hback").disabled=HP<=0;
   document.getElementById("hfwd").disabled=HP>=HIST.length-1;
+  if(ST.face==="front") LASTFRONT=ST.idx;
   const p=cur(); book.dataset.face=ST.face;
   BK="";
   if(JUMP){const t=find(JUMP.to); if(t&&t.f===ST.face&&t.i===ST.idx) BK=`<button type="button" class="backjump" data-back="1">↶ Back to ${pageName(JUMP.f,JUMP.i)}</button>`; else JUMP=null;}
@@ -1203,11 +1206,16 @@ function syncM(){
   $("mNext").disabled=$("next").disabled;
   $("mClear").disabled=$("reset").disabled;
   $("mpage").innerHTML=$("pglabel").innerHTML+`<small>${$("counter").textContent}</small>`;
+  const eb=$("mEmer"), onBack=ST.face==="back";
+  eb.classList.toggle("isnorm",onBack);
+  eb.querySelector(".em").textContent=onBack?"NORMAL":"EMER";
+  eb.setAttribute("aria-label",onBack?"Return to the normal side, to the page you were on":"Emergency procedures index");
   $("mType").textContent="Type size: "+Math.round(ST.zoom*100)+"%";
   $("mHot").setAttribute("aria-pressed",$("hot")?$("hot").getAttribute("aria-pressed"):"false");
 }
 $("mBack").onclick=()=>{closeMenu();$("hback").click()};
-$("mEmer").onclick=()=>{closeMenu();$("emer").click()};
+var LASTFRONT=LASTFRONT||0;
+$("mEmer").onclick=()=>{closeMenu(); if(ST.face==="back") goTo("front",LASTFRONT); else goId("e1")};
 $("mFlip").onclick=()=>{closeMenu();$("flip").click()};
 let installEvt=null;
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;$("mInstall").hidden=false});
