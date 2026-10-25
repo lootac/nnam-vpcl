@@ -2,7 +2,15 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="NNAM Volunteer Pocket Checklist: an unofficial study aid built from the National Naval Aviation Museum Volunteer Guide.">
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1b3a73">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="NNAM VPCL">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 </head><body>
 <title>NNAM Volunteer PCL</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -238,9 +246,29 @@ table.codes td:first-child{white-space:nowrap}
 #tip .x{float:right;border:0;background:none;color:inherit;font:700 13px/1 var(--sans);padding:0 0 4px 10px;cursor:pointer}
 #tip .flagnote{margin-top:7px;padding-top:6px;border-top:1px solid color-mix(in srgb,var(--bg) 35%,transparent)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
-.mbar,.mmenu{display:none}
+.engine{display:none!important}
+/* One control bar on every device: same buttons, same order */
+.cwrap{position:relative;width:min(100%,540px);margin:14px auto 0}
+.mbar{display:flex;gap:6px;justify-content:space-between;align-items:stretch}
+.mb{flex:1 1 0;min-width:0;min-height:56px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--fg);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:700 10.5px/1.1 var(--sans);letter-spacing:.02em;text-transform:uppercase;padding:4px 1px}
+.mb .i{font-size:19px;line-height:1;letter-spacing:0}
+.mb:hover{border-color:var(--muted)}
+.mb:disabled{opacity:.4;cursor:default}
+.mb[aria-pressed="true"],.mb[aria-expanded="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.mbemer{flex-grow:1.25;background:repeating-linear-gradient(45deg,#111 0 7px,#f6e36e 7px 14px);border:2px solid #111;padding:5px}
+.mbemer .em{background:#f6e36e;color:#111;border-radius:6px;padding:9px 4px;font-size:13px;letter-spacing:.08em;width:100%;text-align:center}
+.mmenu:not([hidden]){display:block;position:absolute;z-index:44;left:0;right:0;bottom:calc(100% + 8px);
+  background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 14px 34px -12px rgba(0,0,0,.55)}
+.mpage{font:700 14px/1.3 var(--sans);text-align:center;margin-bottom:10px}
+.mpage small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mi{min-height:52px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--fg);font:700 14px/1.2 var(--sans);cursor:pointer;padding:6px}
+.mi:hover{border-color:var(--muted)}
+.mi:disabled{opacity:.4;cursor:default}
 .qrcap span{word-break:break-all}
 
+@supports (font:-apple-system-body){html{font:-apple-system-body}}
 /* ---------- Phones: one row of big buttons, book sized to the screen, cover flows ---------- */
 @media (max-width:640px), (max-height:500px) and (pointer:coarse){
   body{padding-block:14px calc(88px + env(safe-area-inset-bottom,0px))}
@@ -252,23 +280,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   .bar{display:none}
   aside{display:none}
   body.showhelp aside{display:block}
-  .mbar{display:flex;position:fixed;z-index:45;left:0;right:0;bottom:0;gap:6px;justify-content:space-between;align-items:stretch;
-    padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));
+  .cwrap{position:fixed;z-index:45;left:0;right:0;bottom:0;width:auto;margin:0;
+    padding:8px max(8px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));
     background:var(--bg2);border-top:1px solid var(--line);box-shadow:0 -6px 18px -12px rgba(0,0,0,.45)}
-  .mb{flex:1 1 0;min-width:0;min-height:56px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);cursor:pointer;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:700 11px/1.1 var(--sans);letter-spacing:.04em;text-transform:uppercase;padding:4px 2px}
-  .mb .i{font-size:20px;line-height:1;letter-spacing:0}
-  .mb:disabled{opacity:.4}
-  .mb[aria-pressed="true"],.mb[aria-expanded="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-  .mbemer{background:repeating-linear-gradient(45deg,#111 0 7px,#f6e36e 7px 14px);border:2px solid #111;padding:5px}
-  .mbemer .em{background:#f6e36e;color:#111;border-radius:6px;padding:9px 6px;font-size:13px;letter-spacing:.1em;width:100%;text-align:center}
-  .mmenu:not([hidden]){display:block;position:fixed;z-index:44;left:10px;right:10px;bottom:calc(84px + env(safe-area-inset-bottom,0px));
-    background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 14px 34px -12px rgba(0,0,0,.55)}
-  .mpage{font:700 14px/1.3 var(--sans);text-align:center;margin-bottom:10px}
-  .mpage small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
-  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .mi{min-height:52px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--fg);font:700 14px/1.2 var(--sans);cursor:pointer;padding:6px}
-  .mi:disabled{opacity:.4}
+  .mb:not(.mbemer){background:var(--bg)}
+  .mmenu:not([hidden]){left:8px;right:8px}
   #toast{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
   #coach{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 
@@ -291,24 +307,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 </style>
 
 <div class="band" aria-hidden="true"></div>
-<nav class="mbar" id="mbar" aria-label="Checklist controls">
-  <button type="button" class="mb" id="mBack" aria-label="Back to the page you viewed before"><span class="i" aria-hidden="true">↶</span><span>Back</span></button>
-  <button type="button" class="mb mbemer" id="mEmer" aria-label="Emergency procedures index"><span class="em">EMER</span></button>
-  <button type="button" class="mb" id="mFlip" aria-label="Flip the book over"><span class="i" aria-hidden="true">⇅</span><span>Flip</span></button>
-  <button type="button" class="mb" id="mHot" aria-pressed="false" aria-label="Highlight hotspots"><span class="i" aria-hidden="true">◎</span><span>Hotspots</span></button>
-  <button type="button" class="mb" id="mMore" aria-expanded="false" aria-controls="mmenu"><span class="i" aria-hidden="true">☰</span><span>More</span></button>
-</nav>
-<div class="mmenu" id="mmenu" hidden>
-  <div class="mpage" id="mpage"></div>
-  <div class="mgrid">
-    <button type="button" class="mi" id="mPrev">◀ Previous page</button>
-    <button type="button" class="mi" id="mNext">Next page ▶</button>
-    <button type="button" class="mi" id="mFwd">Forward ↷</button>
-    <button type="button" class="mi" id="mType">Type size</button>
-    <button type="button" class="mi" id="mClear">Clear checks</button>
-    <button type="button" class="mi" id="mHelp">Help and tips</button>
-  </div>
-</div>
 <header class="top">
   <div>
     <div class="eyebrow">National Naval Aviation Museum · Volunteers</div>
@@ -323,7 +321,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <div class="spiral" aria-hidden="true"></div>
       <div class="stage" id="stage"></div>
     </div>
-    <div class="bar" role="toolbar" aria-label="Checklist controls">
+    <div class="engine" hidden>
+    <div class="bar">
       <div class="pager">
         <button class="btn" id="prev" aria-label="Previous page">◀</button>
         <div class="pglabel" id="pglabel" aria-live="polite"></div>
@@ -340,14 +339,37 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <button class="btn" id="reset" disabled>Clear checks</button>
       <span class="counter" id="counter"></span>
     </div>
+    </div>
+    <div class="cwrap" id="cwrap">
+      <div class="mmenu" id="mmenu" hidden>
+        <div class="mpage" id="mpage"></div>
+        <div class="mgrid">
+          <button type="button" class="mi" id="mFlip">⇅ Flip the book</button>
+          <button type="button" class="mi" id="mFwd">Forward ↷</button>
+          <button type="button" class="mi" id="mType">Type size</button>
+          <button type="button" class="mi" id="mClear">Clear checks</button>
+          <button type="button" class="mi" id="mHelp">Help and tips</button>
+          <button type="button" class="mi" id="mInstall" hidden>Install as an app</button>
+        </div>
+      </div>
+      <nav class="mbar" id="mbar" aria-label="Checklist controls">
+        <button type="button" class="mb" id="mPrev" aria-label="Previous page"><span class="i" aria-hidden="true">◀</span><span>Page</span></button>
+        <button type="button" class="mb" id="mBack" aria-label="Back to the page you viewed before"><span class="i" aria-hidden="true">↶</span><span>Back</span></button>
+        <button type="button" class="mb mbemer" id="mEmer" aria-label="Emergency procedures index"><span class="em">EMER</span></button>
+        <button type="button" class="mb" id="mHot" aria-pressed="false" aria-label="Highlight hotspots"><span class="i" aria-hidden="true">◎</span><span>Hotspots</span></button>
+        <button type="button" class="mb" id="mMore" aria-expanded="false" aria-controls="mmenu"><span class="i" aria-hidden="true">☰</span><span>More</span></button>
+        <button type="button" class="mb" id="mNext" aria-label="Next page"><span class="i" aria-hidden="true">▶</span><span>Page</span></button>
+      </nav>
+    </div>
   </section>
 
   <aside>
     <h2>Using this checklist</h2>
-    <p class="lede">A pocket checklist in the Navy style. The white side covers your watch, each volunteer division, and reference facts. Flip the book over, or tap EMER, for the yellow emergency side. Tap a step to check it off. <b>Dotted words explain themselves</b>: point at them, or press and hold on a phone.</p>
+    <p class="lede">A pocket checklist in the Navy style. The white side covers your watch, each volunteer division, and reference facts. Flip the book over, or tap EMER, for the yellow emergency side. Tap a step to check it off. <b>Tap any dotted word</b> for a plain-English explanation. <b>Tap a boxed page number</b> to go there. Tap anywhere else on a line to check it off.</p>
     <ul class="quick" id="quick"></ul>
-    <div class="gest"><b>Touch screen:</b> swipe <b>up</b> on the page for the next page, <b>down</b> for the previous page. Swipe <b>left</b> to go back to the page you viewed before, <b>right</b> to go forward again, like a web browser. With a mouse, use ↶ Back and Fwd ↷.</div>
+    <div class="gest"><b>Touch screen:</b> swipe <b>up</b> on the page for the next page, <b>down</b> for the previous page. Swipe <b>left</b> to go back to the page you viewed before, <b>right</b> to go forward again, like a web browser. Every swipe also has a button in the bar under the book, so nothing depends on gestures.</div>
     <div class="keys"><button type="button" class="kbtn" id="kprev" aria-label="Previous page">←</button> <button type="button" class="kbtn" id="knext" aria-label="Next page">→</button> turn pages · <button type="button" class="kbtn" id="kemer" aria-label="Emergency index">E</button> emergency index · <button type="button" class="kbtn" id="kflip" aria-label="Flip the book">F</button> flip the book<br>Tap a key here, or press it on your keyboard.</div>
+    <div class="gest"><b>Install it like an app</b> (works offline once opened): on iPhone or iPad, tap Safari's Share button, then <b>Add to Home Screen</b>. On Android, Windows or Mac with Chrome or Edge, choose <b>Install</b> from the browser menu, or tap <b>More → Install as an app</b> when it appears.</div>
     <p class="disclaim">Unofficial study aid prepared by a volunteer. The NNAM Volunteer Guide and Museum staff direction govern wherever they differ from this checklist. Where the Guide's own sections disagree, the step is marked † and the explanation says so.</p>
   </aside>
 </div>
@@ -442,7 +464,7 @@ const FRONT = [
   ['caution',"Something that could cause damage, embarrassment or trouble for you or the Museum."],
   ['note',"Helpful extra information."],
   ['p',"A boxed page number, like E-11, is a link. Tap it to go straight to that page; a Back button then brings you back. <b>Dotted explains, boxed goes.</b>"],
-  ['p',"Dotted words have a plain-English explanation. Point at them with a mouse, or press and hold on a phone. Guide references at the bottom of each page open the Guide's own wording."],
+  ['p',"Dotted words have a plain-English explanation. Tap or click one to open its explanation; with a mouse, pointing at it also works. Guide references at the bottom of each page open the Guide's own wording."],
   ['p',"A dagger (†) means two parts of the Volunteer Guide disagree. The explanation tells you how."],
   ['p',"Times are Museum local time (Central)."]]},
  {id:"n1",num:"1-1",tab:"norm",paper:"white",blocks:[
@@ -810,7 +832,12 @@ const QUICK = [
 /* ---------- State ---------- */
 const store={get(k,d){try{const v=localStorage.getItem("vpcl:"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
              set(k,v){try{localStorage.setItem("vpcl:"+k,JSON.stringify(v))}catch(e){}}};
-const ST={face:"front",idx:0,checks:store.get("checks",{}),zoom:store.get("zoom",innerWidth<560?1.25:1)};
+const ST={face:"front",idx:0,checks:store.get("checks",{}),zoom:initialZoom()};
+function initialZoom(){
+  const saved=store.get("zoom",null); if(saved) return saved;
+  let sys=1; try{const base=CSS.supports("font","-apple-system-body")?17:16; sys=parseFloat(getComputedStyle(document.documentElement).fontSize)/base||1}catch(_){}
+  const z0=(innerWidth<560?1.25:1)*sys; return [1,1.25,1.5,1.75].reduce((a,b)=>Math.abs(b-z0)<Math.abs(a-z0)?b:a);
+}
 const book=document.getElementById("book"), stage=document.getElementById("stage");
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 let HIST=[],HP=-1,NAVH=false,JUMP=null,BK="";
@@ -910,7 +937,7 @@ function coverHTML(p){
     <div class="notices">
       <div class="fict">Unofficial study aid. The NNAM Volunteer Guide and Museum staff direction govern.</div>
       <div><b>SOURCE —</b> NNAM Volunteer Guide, revised 20 March 2025.</div>
-      <div><b>HOW TO USE —</b> Tap a step to check it off. Point at, or press and hold, any dotted word for a plain-English explanation. Flip the book, or tap EMER, for emergencies.</div>
+      <div><b>HOW TO USE —</b> Tap a step to check it off. Tap any dotted word for a plain-English explanation. Flip the book, or tap EMER, for emergencies.</div>
       <div class="date">${DATE}</div>
     </div>${locs}</div>`;
   return `<div class="cover">
@@ -1024,7 +1051,7 @@ document.addEventListener("pointerout",e=>{
 document.addEventListener("pointerdown",e=>{
   if(e.pointerType==="mouse") return;
   const el=e.target.closest(TIPSEL); held=false; clearTimeout(holdTimer);
-  if(el&&el.closest(".step")) holdTimer=setTimeout(()=>{held=true;showTip(el,true)},420);
+
 },{passive:true});
 ["pointerup","pointercancel","pointermove"].forEach(ev=>document.addEventListener(ev,e=>{if(ev!=="pointermove"||Math.abs(e.movementX)+Math.abs(e.movementY)>6)clearTimeout(holdTimer)},{passive:true}));
 document.addEventListener("contextmenu",e=>{if(e.target.closest(".step"))e.preventDefault()});
@@ -1033,7 +1060,7 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#tip .x")){hideTip(true);return}
   if(e.target.closest("#tip")) return;
   const el=e.target.closest(TIPSEL);
-  if(el&&!el.closest(".step")){e.preventDefault();e.stopPropagation(); if(pinned&&tipEl===el) hideTip(true); else showTip(el,true); return}
+  if(el){e.preventDefault();e.stopPropagation(); if(pinned&&tipEl===el) hideTip(true); else showTip(el,true); return}
   if(pinned){hideTip(true); if(!e.target.closest(".step,.tab,[data-go],.btn")){return}}
 },true);
 document.addEventListener("keydown",e=>{
@@ -1063,8 +1090,8 @@ document.getElementById("next").onclick=()=>ST.idx<pages(ST.face).length-1&&goTo
 document.getElementById("emer").onclick=()=>goId("e1");
 document.getElementById("flip").onclick=()=>goTo(ST.face==="front"?"back":"front",0);
 document.getElementById("reset").onclick=()=>{const id=cur().id;Object.keys(ST.checks).forEach(k=>{if(k.startsWith(id+":"))delete ST.checks[k]});store.set("checks",ST.checks);render()};
-const zoomBtn=document.getElementById("zoom"), ZOOMS=[1,1.25,1.5];
-function setZoom(z){ST.zoom=z;store.set("zoom",z);book.style.setProperty("--zoom",z);zoomBtn.textContent=`Type ${Math.round(z*100)}%`}
+const zoomBtn=document.getElementById("zoom"), ZOOMS=[1,1.25,1.5,1.75];
+function setZoom(z,save=true){ST.zoom=z;if(save)store.set("zoom",z);book.style.setProperty("--zoom",z);zoomBtn.textContent=`Type ${Math.round(z*100)}%`}
 zoomBtn.onclick=()=>setZoom(ZOOMS[(ZOOMS.indexOf(ST.zoom)+1)%ZOOMS.length]);
 document.addEventListener("keydown",e=>{
   if(e.metaKey||e.ctrlKey||e.altKey||/input|textarea/i.test(e.target.tagName))return;
@@ -1163,7 +1190,7 @@ const HASH={normal:"n1",divisions:"d1",library:"d4",reference:"r1",emergency:"e1
 function fromHash(){const h=(location.hash||"").slice(1).toLowerCase();const id=HASH[h]||(find(h)?h:null);if(id){const t=find(id);ST.face=t.f;ST.idx=t.i}}
 fromHash();
 addEventListener("hashchange",()=>{const h=(location.hash||"").slice(1).toLowerCase();const id=HASH[h]||(find(h)?h:null);if(id)goId(id)});
-setZoom(ST.zoom); render();
+setZoom(ST.zoom,false); render();
 /* ---------- Phone button row ---------- */
 function $(id){return document.getElementById(id)}
 var mmenu=$("mmenu"), mMore=$("mMore");
@@ -1175,13 +1202,16 @@ function syncM(){
   $("mPrev").disabled=$("prev").disabled;
   $("mNext").disabled=$("next").disabled;
   $("mClear").disabled=$("reset").disabled;
-  $("mpage").innerHTML=$("pglabel").innerHTML;
+  $("mpage").innerHTML=$("pglabel").innerHTML+`<small>${$("counter").textContent}</small>`;
   $("mType").textContent="Type size: "+Math.round(ST.zoom*100)+"%";
   $("mHot").setAttribute("aria-pressed",$("hot")?$("hot").getAttribute("aria-pressed"):"false");
 }
 $("mBack").onclick=()=>{closeMenu();$("hback").click()};
 $("mEmer").onclick=()=>{closeMenu();$("emer").click()};
 $("mFlip").onclick=()=>{closeMenu();$("flip").click()};
+let installEvt=null;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;$("mInstall").hidden=false});
+$("mInstall").onclick=async()=>{closeMenu();if(installEvt){installEvt.prompt();try{await installEvt.userChoice}catch(_){}installEvt=null;$("mInstall").hidden=true}};
 $("mHot").onclick=()=>{closeMenu();$("hot").click();syncM()};
 mMore.onclick=()=>{const open=mmenu.hidden;mmenu.hidden=!open;mMore.setAttribute("aria-expanded",open);syncM()};
 $("mPrev").onclick=()=>{$("prev").click()};
@@ -1198,13 +1228,14 @@ hotBtn.onclick=()=>{const on=hotBtn.getAttribute("aria-pressed")!=="true";hotBtn
 /* One-time tip for touch-screen users */
 if(matchMedia("(hover: none)").matches&&!store.get("coached",false)){
   const c=document.createElement("div");c.id="coach";c.setRole=null;c.setAttribute("role","dialog");c.setAttribute("aria-label","Tip");
-  c.innerHTML=`<div><b>Tip</b>Press and hold any <u style="text-decoration-style:dotted">dotted word</u> for a plain-English explanation. Tap <b style="display:inline;color:#fff;letter-spacing:0;text-transform:none;font-size:inherit">Hotspots</b> to see them all. Swipe up or down to turn pages.</div><button type="button">Got it</button>`;
+  c.innerHTML=`<div><b>Tip</b>Tap any <u style="text-decoration-style:dotted">dotted word</u> for a plain-English explanation. Tap <b style="display:inline;color:#fff;letter-spacing:0;text-transform:none;font-size:inherit">Hotspots</b> to see them all. Swipe up or down to turn pages.</div><button type="button">Got it</button>`;
   document.body.appendChild(c);
   const done=()=>{store.set("coached",true);c.remove()};
   c.querySelector("button").onclick=done;
   setTimeout(()=>{if(c.isConnected){c.style.transition="opacity .4s";c.style.opacity="0";setTimeout(done,450)}},12000);
 }
 syncM();
+try{if("serviceWorker" in navigator&&/github\.io$/.test(location.hostname)) addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}catch(_){}
 })();
 </script>
 
