@@ -101,7 +101,14 @@ p.cond{margin:.7em 0 .35em;font-style:italic}
 .step[aria-pressed="true"] .tick{opacity:1;transform:none}
 .step[aria-pressed="true"] .item,.step[aria-pressed="true"] .lead,.step[aria-pressed="true"] .resp,.step[aria-pressed="true"] .num{opacity:.5}
 .tick path{fill:none;stroke:var(--check);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-[data-tip],[data-g],[data-ref]{text-decoration:underline dotted;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,currentColor 50%,transparent);cursor:help}
+[data-tip],[data-g],[data-ref]{text-decoration:underline dotted;text-decoration-thickness:1.6px;text-underline-offset:3px;text-decoration-color:var(--navy);cursor:help}
+.book.showhot [data-tip],.book.showhot [data-g],.book.showhot [data-ref]{background:rgba(212,165,42,.42);box-shadow:0 0 0 2px rgba(212,165,42,.42);border-radius:2px}
+.sheet.yellow [data-tip],.sheet.yellow [data-g],.sheet.yellow [data-ref]{text-decoration-color:#111}
+.book.showhot .sheet.yellow [data-tip],.book.showhot .sheet.yellow [data-g],.book.showhot .sheet.yellow [data-ref]{background:rgba(27,58,115,.18);box-shadow:0 0 0 2px rgba(27,58,115,.18)}
+.btn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+#coach{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:75;width:min(340px,calc(100vw - 32px));background:var(--navy);color:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 12px 30px -10px rgba(0,0,0,.6);font:400 14px/1.45 var(--sans);display:flex;gap:12px;align-items:flex-start}
+#coach b{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#f0cf74;margin-bottom:2px}
+#coach button{flex:none;border:0;background:#f0cf74;color:#111;font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;border-radius:6px;padding:9px 11px;cursor:pointer;margin-top:2px}
 .flag{font-family:var(--sans);font-weight:700;font-size:.8em;vertical-align:.25em;margin-left:.1em}
 
 /* Warnings, cautions, notes: 16 picas, centered */
@@ -251,6 +258,7 @@ aside .lede{font-size:14.5px;line-height:1.55;margin:0 0 16px;max-width:60ch}
       <button class="btn" id="hback" aria-label="Back to the page you viewed before" disabled>↶ Back</button>
       <button class="btn" id="hfwd" aria-label="Forward to the next page you viewed" disabled>Fwd ↷</button>
       <button class="btn" id="flip">Flip PCL</button>
+      <button class="btn" id="hot" aria-pressed="false" title="Highlight every word on this page that has an explanation">Hotspots</button>
       <button class="btn" id="zoom">Type 100%</button>
       <button class="btn" id="reset" disabled>Clear checks</button>
       <span class="counter" id="counter"></span>
@@ -1059,6 +1067,19 @@ function fromHash(){const h=(location.hash||"").slice(1).toLowerCase();const id=
 fromHash();
 addEventListener("hashchange",()=>{const h=(location.hash||"").slice(1).toLowerCase();const id=HASH[h]||(find(h)?h:null);if(id)goId(id)});
 setZoom(ST.zoom); render();
+/* Hotspots toggle: highlight every word with an explanation */
+const hotBtn=document.getElementById("hot");
+hotBtn.onclick=()=>{const on=hotBtn.getAttribute("aria-pressed")!=="true";hotBtn.setAttribute("aria-pressed",on);book.classList.toggle("showhot",on);
+  if(on){const n=stage.querySelectorAll("[data-tip],[data-g],[data-ref]").length;toast(n?`${n} hotspot${n===1?"":"s"} on this page`:"No hotspots on this page")}};
+/* One-time tip for touch-screen users */
+if(matchMedia("(hover: none)").matches&&!store.get("coached",false)){
+  const c=document.createElement("div");c.id="coach";c.setRole=null;c.setAttribute("role","dialog");c.setAttribute("aria-label","Tip");
+  c.innerHTML=`<div><b>Tip</b>Press and hold any <u style="text-decoration-style:dotted">dotted word</u> for a plain-English explanation. Tap <b style="display:inline;color:#fff;letter-spacing:0;text-transform:none;font-size:inherit">Hotspots</b> to see them all. Swipe up or down to turn pages.</div><button type="button">Got it</button>`;
+  document.body.appendChild(c);
+  const done=()=>{store.set("coached",true);c.remove()};
+  c.querySelector("button").onclick=done;
+  setTimeout(()=>{if(c.isConnected){c.style.transition="opacity .4s";c.style.opacity="0";setTimeout(done,450)}},12000);
+}
 })();
 </script>
 
