@@ -324,7 +324,7 @@ const G = {
  "Bldg 3221":"The Aircraft Preservation and Maintenance building (restoration hangar) behind Hangar Bay One, inside the fence.",
  "SF 5512":"The application form for a base access pass, for volunteers who do not already have a military or Defense Department ID.",
  "shelter in place":"Stay inside, out of sight and behind cover, until help arrives, instead of leaving the building.",
- "memory item":"An emergency step marked with a star (*). Know it by heart, without the book.",
+ "memory item":"An emergency step marked with a star (*). Know it by heart, without the book. The Guide does not name memory items; this checklist stars the few steps where instinct is often wrong.",
  "flight line":"The area north of the Museum where the public watches Blue Angels practices.",
  "Visitor Support":"Volunteers who roam the Museum and Hangar Bay One to help guests and keep aircraft, exhibits and people safe.",
  "Information Desk":"The desk inside the main entrance; the first stop for visitors. (850) 452-2963.",
@@ -359,7 +359,7 @@ const FRONT = [
   ['h',"HOW TO READ THIS CHECKLIST"],
   ['p',"Each line names something to check, then what it should be. Read it as “item: action.”"],
   S_("Radio","ON",{t:"The thing to check or do.",r:"What it should be, or what to do. Tap the line to check it off."}),
-  ['p',"A star (*) marks a [[memory item]]: an emergency step to know by heart."],
+  ['p',"A star (*) marks a [[memory item]]: an emergency step to know by heart. The Volunteer Guide does not name memory items. This checklist stars only the few steps where instinct is often wrong, such as letting staff call 911."],
   ['p',"An italic line beginning <i>If</i> applies only in that situation."],
   ['warning',"Something that could hurt you or someone else if not followed."],
   ['caution',"Something that could cause damage, embarrassment or trouble for you or the Museum."],
@@ -636,11 +636,13 @@ const BACK = [
   ['grp',"2  Fire"],['idx',[["Fire","e3"],["Building Evacuation","e4"],["Tornado","e5"]]],
   ['grp',"3  Security"],['idx',[["Active Shooter","e6"],["Bomb Threat","e7"],["Weapon or Unattended Package","e8"],["Unruly Guest, Harassment, Theft","e9"]]],
   ['grp',"4  Lost Child"],['idx',[["Lost Child","e10"]]],
-  ['grp',"Radio Codes"],['idx',[["Radio Code Words","e11"]]]]},
+  ['grp',"Radio Codes"],['idx',[["Radio Code Words","e11"]]],
+  ['h5',"Know by heart"],
+  ['ul',["Staff call 911, not you. Radio them.","Use the code word, never describe the emergency.","Never say a lost child's name on the radio or PA.","Active shooter: shelter in place with visitors.","Tornado: visitors into the Giant Screen Theater.","Evacuation muster: SW corner, main parking lot."]]]},
  {id:"e2",num:"E-2",tab:"med",paper:"yellow",emer:true,ref:"6.5 · Att 9",blocks:[
   ['rev',"MEDICAL","VISITOR ILL OR INJURED"],
-  S_("Staff","Call by radio",{c:1,r:"Report right away to the nearest staff member. Use [[BARNEY]] for a serious illness or injury."}),
-  S_("Person","Stay with, comfort",{c:1}),
+  S_("Museum staff","Call by radio, not 911",{c:1,r:"Report right away to the nearest staff member. Use [[BARNEY]] for a serious illness or injury. Staff, not volunteers, call 911."}),
+  S_("Person","Stay with, comfort"),
   ['cond',"If a defibrillator or CPR is needed:"],
   S_("[[AED]]","Any volunteer may use"),
   S_("CPR","Only if currently certified"),
@@ -651,8 +653,8 @@ const BACK = [
  {id:"e3",num:"E-3",tab:"fire",paper:"yellow",emer:true,ref:"6.8.1 · Att 9",blocks:[
   ['rev',"FIRE","CODE RED"],
   S_("Radio","“CODE RED” + location",{c:1,f:"Guide section 6.8.1 says to call CODE RED for a fire. The Visitor Support training sheet (Attachment 9) lists “suspicion of fire” as a BARNEY call. This checklist follows section 6.8.1. Ask your Division Head which to use for a fire you suspect but haven't seen."}),
-  S_("Fire alarm","Pull",{c:1}),
-  S_("Visitors","Move away from fire",{c:1}),
+  S_("Fire alarm","Pull"),
+  S_("Visitors","Move away from fire"),
   ['cond',"If evacuation is ordered:"],
   S_("Building Evacuation","Perform E-4"),
   ['note',"Before your first watch, learn where the exits, fire-alarm pull boxes, extinguishers and AEDs are."]]},
@@ -672,13 +674,12 @@ const BACK = [
   ['rev',"SECURITY","ACTIVE SHOOTER"],
   S_("Radio","“CHARLIE” + location",{c:1,t:"Use for an active shooter, or anyone with a weapon who is not a uniformed police officer."}),
   S_("Shooter","Do not engage",{c:1}),
-  S_("Cover","Take, with visitors",{c:1,r:"Get to a safe place out of sight, taking as many visitors as you can without drawing the shooter's attention."}),
-  S_("Shelter in place","Until help arrives",{f:"Guide section 6.8.1 says to [[shelter in place]] with visitors until help arrives. The Visitor Support training sheet (Attachment 9) says “seek shelter or immediately get out of the building.” This checklist follows section 6.8.1. Ask your Division Head."}),
+  S_("Shelter in place","With visitors, until help arrives",{c:1,r:"Get to a safe place out of sight, taking as many visitors as you can without drawing the shooter's attention. Stay there until help arrives.",f:"Guide section 6.8.1 says to [[shelter in place]] with visitors until help arrives. The Visitor Support training sheet (Attachment 9) says “seek shelter or immediately get out of the building.” This checklist follows section 6.8.1. Ask your Division Head."}),
   ['note',"Staff call law enforcement."]]},
  {id:"e7",num:"E-7",tab:"sec",paper:"yellow",emer:true,ref:"6.8.1 · Att 9",blocks:[
   ['rev',"SECURITY","BOMB THREAT"],
   S_("Radio","“OPIE” + location",{c:1}),
-  S_("Staff","Wait for them",{c:1}),
+  S_("Staff","Wait for them"),
   ['cond',"If evacuation is ordered:"],
   S_("Building Evacuation","Perform E-4")]},
  {id:"e8",num:"E-8",tab:"sec",paper:"yellow",emer:true,ref:"6.1.5 · 6.8.1 · Att 9",blocks:[
@@ -827,7 +828,7 @@ function coverHTML(p){
   return `<div class="cover">
     <div class="pub">${PUB}</div>
     <div class="ttl"><div class="ac" style="font-size:calc(var(--pt)*22)">EMERGENCY<br>PROCEDURES</div><div class="ac2">NNAM Volunteer Pocket Checklist</div></div>
-    <div class="notices"><div class="fict">Starred steps are memory items. Know them without the book.</div><div class="date">${DATE}</div></div>${locs}</div>`;
+    <div class="notices"><div class="fict">Starred (*) steps are this checklist's suggested memory items: the few where instinct is often wrong.</div><div class="date">${DATE}</div></div>${locs}</div>`;
 }
 function sheetHTML(p){
   const even=pnum(p)%2===0&&pnum(p)>0, emer=!!p.emer;
