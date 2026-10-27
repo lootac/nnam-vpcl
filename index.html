@@ -243,7 +243,7 @@ table.codes td:first-child{white-space:nowrap}
 #tip b.h{display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;opacity:.75;margin-bottom:3px}
 #tip p{margin:0 0 6px} #tip p:last-child{margin-bottom:0}
 #tip .src{display:block;margin-top:6px;font-size:10.5px;letter-spacing:.06em;opacity:.7}
-#tip .x{float:right;border:0;background:none;color:inherit;font:700 13px/1 var(--sans);padding:0 0 4px 10px;cursor:pointer}
+#tip .x{position:relative;z-index:1;float:right;border:0;background:none;color:inherit;font:700 13px/1 var(--sans);padding:0 0 4px 10px;cursor:pointer}
 #tip .flagnote{margin-top:7px;padding-top:6px;border-top:1px solid color-mix(in srgb,var(--bg) 35%,transparent)}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
 .engine{display:none!important}
@@ -306,6 +306,37 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 }
 @media (max-height:500px) and (pointer:coarse){header.top,.band{display:none} body{padding-top:8px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---------- Ask the Guide (Change 1) ---------- */
+.mi.askmi{grid-column:1/-1;background:var(--navy,#1b3a73);color:#fff;border-color:var(--navy,#1b3a73)}
+#askov[hidden]{display:none}
+#askov{position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+.askbox{width:min(560px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:var(--bg);color:var(--fg);border-radius:14px;border:1px solid var(--line);
+  box-shadow:0 18px 40px -12px rgba(0,0,0,.6);padding:16px 16px 18px;font:400 17px/1.5 var(--sans)}
+.askhd{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.askhd h2{margin:0;font:700 19px/1.2 var(--sans);flex:1}
+.askx{min-width:48px;min-height:48px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--fg);font:700 20px/1 var(--sans);cursor:pointer}
+.asknote{font-size:14px;color:var(--muted);margin:0 0 12px}
+.askbox label{display:block;font-weight:700;font-size:15px;margin:10px 0 4px}
+.askbox input,.askbox textarea{width:100%;box-sizing:border-box;font:400 17px/1.4 var(--sans);padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--fg)}
+.askbox textarea{min-height:88px;resize:vertical}
+.askrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.askbtn{flex:1 1 auto;min-height:52px;padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--fg);font:700 16px/1.2 var(--sans);cursor:pointer}
+.askbtn.go{background:var(--navy,#1b3a73);color:#fff;border-color:var(--navy,#1b3a73);flex-grow:2}
+.askbtn[aria-pressed="true"]{background:#b3261e;color:#fff;border-color:#b3261e}
+.askbtn:disabled{opacity:.45;cursor:default}
+.askans{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--line)}
+.askans[hidden]{display:none}
+.askans .q{font-size:14px;color:var(--muted);margin:0 0 6px}
+.askans .a p{margin:0 0 8px}
+.askans .a p:last-child{margin-bottom:0}
+.askans .err{color:#b3261e;font-weight:700}
+.askans .meta{margin-top:8px;font-size:13px;color:var(--muted)}
+.askans [data-ref]{font-weight:700;white-space:nowrap}
+.askwait{display:inline-block;width:1em;height:1em;border:3px solid var(--line);border-top-color:var(--navy,#1b3a73);border-radius:50%;animation:askspin .9s linear infinite;vertical-align:-3px;margin-right:8px}
+@keyframes askspin{to{transform:rotate(360deg)}}
+.askforget{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font:400 13px var(--sans);cursor:pointer;margin-top:10px}
+@media (max-width:640px){#askov{align-items:flex-end;padding:0}.askbox{border-radius:16px 16px 0 0;max-height:92dvh;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}}
 </style>
 
 <div class="band" aria-hidden="true"></div>
@@ -346,6 +377,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <div class="mmenu" id="mmenu" hidden>
         <div class="mpage" id="mpage"></div>
         <div class="mgrid">
+          <button type="button" class="mi askmi" id="mAsk">💬 Ask the Guide</button>
           <button type="button" class="mi" id="mFlip">⇅ Flip the book</button>
           <button type="button" class="mi" id="mFwd">Forward ↷</button>
           <button type="button" class="mi" id="mType">Type size</button>
@@ -376,6 +408,22 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   </aside>
 </div>
 
+
+<div id="askov" hidden>
+  <div class="askbox" role="dialog" aria-modal="true" aria-labelledby="askh">
+    <div class="askhd"><h2 id="askh">💬 Ask the Guide</h2><button type="button" class="askx" id="askx" aria-label="Close">✕</button></div>
+    <p class="asknote">Answers come only from the Volunteer Guide, with the section to check. In an emergency, call 911 and follow museum staff. Needs internet.</p>
+    <div id="askpw"><label for="askpass">Passphrase</label><input id="askpass" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false"></div>
+    <label for="askq">Your question</label>
+    <textarea id="askq" maxlength="500" placeholder="For example: What do I do if a child is lost?"></textarea>
+    <div class="askrow">
+      <button type="button" class="askbtn" id="askmic" hidden aria-pressed="false">🎤 Speak</button>
+      <button type="button" class="askbtn go" id="askgo">Ask</button>
+    </div>
+    <div class="askans" id="askans" hidden aria-live="polite"></div>
+    <button type="button" class="askforget" id="askforget" hidden>Forget passphrase on this device</button>
+  </div>
+</div>
 <script>
 (function(){
 const PUB = "NNAM VPCL";
@@ -1097,7 +1145,7 @@ const zoomBtn=document.getElementById("zoom"), ZOOMS=[1,1.25,1.5,1.75];
 function setZoom(z,save=true){ST.zoom=z;if(save)store.set("zoom",z);book.style.setProperty("--zoom",z);zoomBtn.textContent=`Type ${Math.round(z*100)}%`}
 zoomBtn.onclick=()=>setZoom(ZOOMS[(ZOOMS.indexOf(ST.zoom)+1)%ZOOMS.length]);
 document.addEventListener("keydown",e=>{
-  if(e.metaKey||e.ctrlKey||e.altKey||/input|textarea/i.test(e.target.tagName))return;
+  if(e.metaKey||e.ctrlKey||e.altKey||/input|textarea/i.test(e.target.tagName)||!document.getElementById("askov").hidden)return;
   if(e.key==="ArrowRight")document.getElementById("next").click();
   else if(e.key==="ArrowLeft")document.getElementById("prev").click();
   else if(e.key==="e"||e.key==="E")goId("e1");
@@ -1242,6 +1290,90 @@ if(matchMedia("(hover: none)").matches&&!store.get("coached",false)){
   c.querySelector("button").onclick=done;
   setTimeout(()=>{if(c.isConnected){c.style.transition="opacity .4s";c.style.opacity="0";setTimeout(done,450)}},12000);
 }
+
+/* ---------- Ask the Guide (Change 1) — isolated: if it fails, nothing else is affected ---------- */
+(function(){
+const ASK_URL="https://vpcl-ask.cud-rubric-0e.workers.dev/ask";
+const ov=$("askov"), q=$("askq"), pw=$("askpass"), go=$("askgo"), ans=$("askans"), mic=$("askmic");
+let busy=false, lastAnswer="", lastFocus=null;
+const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function syncPw(){const has=!!store.get("askpass","");$("askpw").hidden=has;$("askforget").hidden=!has}
+function openAsk(){closeMenu();hideTip(true);lastFocus=document.activeElement;syncPw();ov.hidden=false;document.body.style.overflow="hidden";
+  setTimeout(()=>{($("askpw").hidden?q:pw).focus()},60)}
+function closeAsk(){stopMic();try{speechSynthesis.cancel()}catch(_){}ov.hidden=true;document.body.style.overflow="";hideTip(true);if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+$("mAsk").onclick=openAsk;
+$("askx").onclick=closeAsk;
+ov.addEventListener("click",e=>{if(e.target===ov)closeAsk()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!ov.hidden&&!tip.classList.contains("pin"))closeAsk()});
+$("askforget").onclick=()=>{store.set("askpass","");pw.value="";syncPw();pw.focus()};
+q.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();ask()}});
+pw.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();q.focus()}});
+go.onclick=ask;
+
+function render(question,html,meta){
+  ans.hidden=false;
+  ans.innerHTML=`<p class="q">You asked: ${esc(question)}</p><div class="a">${html}</div>`+(meta?`<div class="meta">${meta}</div>`:"");
+}
+function fmtAnswer(t){
+  let h=esc(t).split(/\n+/).filter(x=>x.trim()).map(x=>`<p>${x}</p>`).join("");
+  h=h.replace(/\[§\s*([0-9]+(?:\.[0-9]+)*)\]|§\s*([0-9]+(?:\.[0-9]+)*)/g,(m,a,b)=>{const k=a||b;
+    return REFS[k]?`<span data-ref="r:${k}" tabindex="0" role="button">§${k}</span>`:`§${k}`});
+  return linkPages(h);
+}
+async function ask(){
+  if(busy) return;
+  const question=q.value.trim(); if(!question){q.focus();return}
+  let pass=store.get("askpass","")||pw.value.trim();
+  if(!pass){$("askpw").hidden=false;pw.focus();render(question,`<p class="err">Please type the passphrase first.</p>`);return}
+  if(!navigator.onLine){render(question,`<p class="err">No internet connection right now. Ask the Guide needs internet; the checklist pages still work.</p>`);return}
+  stopMic();try{speechSynthesis.cancel()}catch(_){}
+  busy=true;go.disabled=true;go.textContent="Asking…";
+  render(question,`<p><span class="askwait" aria-hidden="true"></span>Looking in the Guide…</p>`);
+  let r,d={};
+  try{
+    const c=new AbortController(),t=setTimeout(()=>c.abort(),45000);
+    r=await fetch(ASK_URL,{method:"POST",headers:{"Content-Type":"application/json"},signal:c.signal,
+      body:JSON.stringify({q:question,pass,page:(cur()&&cur().num)||""})});
+    clearTimeout(t); d=await r.json().catch(()=>({}));
+  }catch(e){
+    render(question,`<p class="err">Could not reach the Ask service. Please check your internet and try again.</p>`);
+    busy=false;go.disabled=false;go.textContent="Ask";return;
+  }
+  busy=false;go.disabled=false;go.textContent="Ask";
+  if(r.status===401){store.set("askpass","");syncPw();pw.value="";render(question,`<p class="err">That passphrase wasn't recognized. Please type it again.</p>`);pw.focus();return}
+  if(!r.ok||!d.answer){render(question,`<p class="err">${esc(d.error||"Something went wrong. Please try again.")}</p>`);return}
+  if(!store.get("askpass","")){store.set("askpass",pass);syncPw()}
+  lastAnswer=d.answer;
+  const speak=("speechSynthesis" in window)?` · <button type="button" class="askforget" id="askread" style="margin:0">🔊 Read aloud</button>`:"";
+  render(question,fmtAnswer(d.answer),`Tap a § number to read that part of the Guide.${typeof d.left==="number"?` ${d.left} questions left today.`:""}${speak}`);
+  const rd=$("askread"); if(rd) rd.onclick=readAloud;
+}
+function readAloud(){
+  try{
+    if(speechSynthesis.speaking){speechSynthesis.cancel();return}
+    const txt=lastAnswer.replace(/\[§[^\]]*\]/g,"").replace(/§\s*[0-9.]+/g,"").replace(/\b([E1-3])-(\d{1,2})\b/g,"page $1 $2");
+    const u=new SpeechSynthesisUtterance(txt); u.rate=.92; u.lang="en-US"; speechSynthesis.speak(u);
+  }catch(_){}
+}
+/* Speak a question (where the browser supports it) */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition; let rec=null;
+function stopMic(){if(rec){try{rec.stop()}catch(_){}rec=null}mic.setAttribute("aria-pressed","false");mic.textContent="🎤 Speak"}
+if(SR){mic.hidden=false;
+  mic.onclick=()=>{
+    if(rec){stopMic();return}
+    try{rec=new SR();rec.lang="en-US";rec.interimResults=true;rec.continuous=false;
+      const base=q.value?q.value.replace(/\s*$/," "):"";
+      rec.onresult=e=>{let t="";for(const x of e.results)t+=x[0].transcript;q.value=base+t};
+      rec.onend=()=>{rec=null;stopMic()};
+      rec.onerror=()=>{rec=null;stopMic()};
+      rec.start();mic.setAttribute("aria-pressed","true");mic.textContent="⏹ Stop";
+    }catch(_){stopMic();mic.hidden=true}
+  };
+}
+/* Boxed page links inside an answer: close the panel, then go */
+ans.addEventListener("click",e=>{const g=e.target.closest(".plink[data-go]");if(g){e.preventDefault();closeAsk();jump(g.dataset.go)}});
+ans.addEventListener("keydown",e=>{const g=e.target.closest(".plink[data-go]");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();closeAsk();jump(g.dataset.go)}});
+})();
 syncM();
 try{if("serviceWorker" in navigator&&/github\.io$/.test(location.hostname)) addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}catch(_){}
 })();
