@@ -10,7 +10,7 @@ Verification methods: I = inspection, A = analysis, D = demonstration, T = test.
 | R-2 | Complements, never changes, official guidance. Guide conflicts are flagged (†); suggested memory items are labeled as the checklist's suggestion. | I | Met |
 | R-3 | NATOPS pocket-checklist look: white normal side, yellow emergency side with hash border, tabs, memory items, list of effective pages. | I | Met |
 | R-4 | Plain language for non-military readers; Navy and Museum terms explained on tap. | I, D | Met |
-| R-5 | Suited to older users: type to 175%, large buttons, nothing disappears on its own, respects device text size. | D | Met |
+| R-5 | Suited to older users: pinch to zoom for bigger type (no separate type-size control), large buttons, nothing disappears on its own, a sign when a page has more below. | D | Met |
 | R-6 | Works the same on iPhone, Android, iPad, Windows and Mac browsers. | T | Partial (Chrome engine verified; Safari/Firefox engines pending real devices) |
 | R-7 | One control model for touch, mouse and keyboard; gestures and keys are shortcuts only. | D | Met |
 | R-8 | Opens from a QR code with no account or app store. | T | Met |
