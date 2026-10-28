@@ -244,7 +244,7 @@ table.codes td:first-child{white-space:nowrap}
 #tip{position:fixed;z-index:60;width:max-content;max-width:min(320px,calc(100vw - 24px));max-height:min(56vh,420px);overflow:auto;padding:9px 11px 10px;border-radius:6px;pointer-events:none;
   background:var(--fg);color:var(--bg);font:400 13px/1.45 var(--sans);box-shadow:0 8px 22px -8px rgba(0,0,0,.55);opacity:0;transform:translateY(3px);transition:opacity .12s,transform .12s;visibility:hidden}
 #tip.on{opacity:1;transform:none;visibility:visible}
-#tip.pin{pointer-events:auto}
+#tip.pin{pointer-events:auto;max-height:min(70vh,560px);overscroll-behavior:contain}
 #tip b.h{display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;opacity:.75;margin-bottom:3px}
 #tip p{margin:0 0 6px} #tip p:last-child{margin-bottom:0}
 #tip .src{display:block;margin-top:6px;font-size:10.5px;letter-spacing:.06em;opacity:.7}
@@ -1073,11 +1073,11 @@ function goId(id){const t=find(id);if(t)goTo(t.f,t.i)}
 const tip=document.createElement("div"); tip.id="tip"; tip.setAttribute("role","tooltip"); document.body.appendChild(tip);
 let tipEl=null, pinned=false, holdTimer=null, held=false;
 const TIPSEL="[data-tip],[data-g],[data-ref]";
-function tipContent(el){
+function tipContent(el,pin){
   if(el.dataset.g){const k=el.dataset.g;return `<b class="h">${k}</b><p>${G[k]}</p>`}
   if(el.dataset.ref){const [t,v]=el.dataset.ref.split(":");
     if(t==="a") return `<b class="h">Guide · Attachment ${v}</b><p><b>${ATT[v][0]}.</b> ${ATT[v][1]}</p>`;
-    return v.split(",").map(k=>{let txt=REFS[k].t;if(txt.length>900)txt=txt.slice(0,900).replace(/\s\S*$/,"")+" …";
+    return v.split(",").map(k=>{let txt=REFS[k].t;if(!pin&&txt.length>900)txt=txt.slice(0,900).replace(/\s\S*$/,"")+" …\nClick for the whole section.";
       return `<b class="h">Guide §${k} · ${REFS[k].h}</b>`+txt.split("\n").map(x=>`<p>${x}</p>`).join("")}).join("")+`<span class="src">VOLUNTEER GUIDE, REV. 20 MAR 2025 · TEXT RECOVERED FROM SCAN</span>`;}
   let h=el.dataset.tip?(/<(p|ul)>/.test(el.dataset.tip)?el.dataset.tip:`<p>${el.dataset.tip}</p>`):"";
   h=fmtPlain(h);
@@ -1093,7 +1093,7 @@ function placeTip(el){
   tip.style.left=x+"px"; tip.style.top=y+"px";
 }
 function showTip(el,pin){
-  const c=tipContent(el); if(!c) return;
+  const c=tipContent(el,pin); if(!c) return;
   tipEl=el; pinned=!!pin;
   tip.innerHTML=(pin?`<button class="x" type="button" aria-label="Close">✕</button>`:"")+c;
   tip.classList.toggle("pin",pinned); tip.classList.add("on"); tip.scrollTop=0; placeTip(el);
